@@ -29,4 +29,10 @@ inline double degrees_to_radians(double degrees) {
 #include "vector3.h"
 #include "interval.h"
 
+// Colors
+
+const Color COLOR_BLUE = Color(0.5, 0.7, 1.0);
+const Color COLOR_WHITE = Color(1.0, 1.0, 1.0);
+const Color COLOR_BLACK = Color(0.0, 0.0, 0.0);
+
 #endif //!RAYMOND_H_
