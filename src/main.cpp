@@ -1,8 +1,26 @@
 #include <iostream>
+#include <fstream>
 
 #include "vector3.h"
 #include "color.h"
 #include "ray.h"
+
+// Sphere
+
+const Point3 SPHERE_CENTER = Point3(0, 0, -1);
+const double SPHERE_RADIUS = 0.2;
+
+bool hit_sphere(const Point3& center, double radius, const Ray& r) {
+  const Vector3& d = r.direction();
+  const Vector3& Q = r.origin();
+
+  const double a = dot(d, d);
+  const double b = dot(-2 * d, (center - Q));
+  const double c = dot(center - Q, center - Q) - radius * radius;
+
+  const double discriminant = b * b - 4 * a * c;
+  return (discriminant >= 0);
+}
 
 // Colors
 
@@ -15,6 +33,10 @@ Color gradient(const Color& start_color, const Color& end_color, double a) {
 }
 
 Color ray_color(const Ray& r) {
+  if (hit_sphere(SPHERE_CENTER, SPHERE_RADIUS, r)) {
+    return COLOR_BLACK;
+  }
+
   Vector3 unit_direction = unit_vector(r.direction());
   const double a = 0.5 * (unit_direction.y() + 1.0);
 
@@ -46,11 +68,23 @@ const Vector3 pixel_delta_u = viewport_u / IMAGE_WIDTH;
 const Vector3 pixel_delta_v = viewport_v / IMAGE_HEIGHT;
 const Point3 pixel00_loc = viewport_upper_left +  0.5 * (pixel_delta_u + pixel_delta_v);
 
-int main(void) {
+int main(int argc, char * argv[]) {
+  // Parse arguments
+
+  if (argc != 2) {
+    std::cerr << "Usage: raymond <image_output.ppm>\n";
+    return 1;
+  }
+
+  std::ofstream image_file(argv[1]);
+  if (!image_file) {
+    std::cerr << "Failed to open output image file " << argv[1] << "\n";
+    return 2;
+  }
 
   // Render
 
-  std::cout << "P3\n" << IMAGE_WIDTH << ' ' << IMAGE_HEIGHT << "\n255\n";
+  image_file << "P3\n" << IMAGE_WIDTH << ' ' << IMAGE_HEIGHT << "\n255\n";
 
   for (int row = 0; row < IMAGE_HEIGHT; row++) {
     std::clog << "\rScannlines remaining: " << (IMAGE_HEIGHT - row) << ' ' << std::flush;
@@ -61,10 +95,11 @@ int main(void) {
       const Ray ray(camera_center, ray_direction);
       const Color pixel_color = ray_color(ray);
 
-      write_color(std::cout, pixel_color);
+      write_color(image_file, pixel_color);
     }
   }
   std::clog << "\rDone                            \n";
+  image_file.close();
 
   return 0;
 }
