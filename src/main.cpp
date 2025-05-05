@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "vector3.h"
+#include "color.h"
 
 // Image
 
@@ -17,15 +18,13 @@ int main(void) {
     std::clog << "\rScannlines remaining: " << (IMAGE_HEIGHT - row) << ' ' << std::flush;
 
     for (int col = 0; col < IMAGE_WIDTH; col++) {
-      const double r = double(col) / (IMAGE_WIDTH - 1);
-      const double g = double(row) / (IMAGE_HEIGHT - 1);
-      const double b = 0.0;
+      const Color pixel_color = Color(
+          double(col) / (IMAGE_WIDTH - 1),
+          double(row) / (IMAGE_HEIGHT - 1),
+          0.0
+          );
 
-      const int ir = int(r * 255.999);
-      const int ig = int(g * 255.999);
-      const int ib = int(b * 255.999);
-
-      std::cout << ir << ' ' << ig << ' ' << ib << '\n';
+      write_color(std::cout, pixel_color);
     }
   }
   std::clog << "\rDone                            \n";
