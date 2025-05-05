@@ -1,8 +1,6 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include "ray.h"
-
 class HitRecord {
   public:
     Point3 p;

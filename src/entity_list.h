@@ -3,11 +3,7 @@
 
 #include "entity.h"
 
-#include <memory>
 #include <vector>
-
-using std::make_shared;
-using std::shared_ptr;
 
 class EntityList: public Entity {
   public:
@@ -25,7 +21,7 @@ class EntityList: public Entity {
     }
 
     void add(shared_ptr<Entity> entity) {
-      add(entity);
+      list.push_back(entity);
     }
 
     bool hit(const Ray& r, double ray_tmin, double ray_tmax, HitRecord& rec) const override {
@@ -33,11 +29,11 @@ class EntityList: public Entity {
       bool hit_anything = false;
       double closest_so_far = ray_tmax;
 
-      for (const Entity& e : list) {
-        if (e->hit(r, ray_tmin, closest_so_far, temp_rec)) {
+      for (const auto& e : list) {
+        if (e->hit(r, ray_tmin, closest_so_far, temp_record)) {
           hit_anything = true;
-          closest_so_far = temp_rec.t;
-          rec = temp_rec;
+          closest_so_far = temp_record.t;
+          rec = temp_record;
         }
       }
 

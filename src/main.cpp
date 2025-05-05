@@ -1,26 +1,9 @@
-#include <iostream>
 #include <fstream>
 
-#include "vector3.h"
-#include "color.h"
-#include "ray.h"
-
-// Sphere
-
-const Point3 SPHERE_CENTER = Point3(0, 0, -1);
-const double SPHERE_RADIUS = 0.2;
-
-bool hit_sphere(const Point3& center, double radius, const Ray& r) {
-  const Vector3& d = r.direction();
-  const Vector3& Q = r.origin();
-
-  const double a = dot(d, d);
-  const double b = dot(-2 * d, (center - Q));
-  const double c = dot(center - Q, center - Q) - radius * radius;
-
-  const double discriminant = b * b - 4 * a * c;
-  return (discriminant >= 0);
-}
+#include "raymond.h"
+#include "entity.h"
+#include "entity_list.h"
+#include "sphere.h"
 
 // Colors
 
@@ -32,9 +15,11 @@ Color gradient(const Color& start_color, const Color& end_color, double a) {
   return (1.0 - a) * end_color + a * start_color; // linear interpolation or "lerp" for short
 }
 
-Color ray_color(const Ray& r) {
-  if (hit_sphere(SPHERE_CENTER, SPHERE_RADIUS, r)) {
-    return COLOR_BLACK;
+Color ray_color(const Ray& r, const Entity& world) {
+  HitRecord rec;
+  if (world.hit(r, 0, infinity, rec)) {
+    const Vector3 n = rec.normal;
+    return 0.5 * Color(n.x() + 1, n.y() + 1, n.z() + 1);
   }
 
   Vector3 unit_direction = unit_vector(r.direction());
@@ -46,7 +31,7 @@ Color ray_color(const Ray& r) {
 // Image
 
 const double ASPECT_RATIO = 16.0 / 9.0;
-const int IMAGE_WIDTH = 400;
+const int IMAGE_WIDTH = 1920;
 const int IMAGE_HEIGHT = (int(IMAGE_WIDTH / ASPECT_RATIO) < 1) ? 1 : int(IMAGE_WIDTH / ASPECT_RATIO);
 
 // Camera
@@ -82,6 +67,12 @@ int main(int argc, char * argv[]) {
     return 2;
   }
 
+  // Setup world
+
+  EntityList world;
+  world.add(make_shared<Sphere>(Point3(0, 0, -1), 0.5));
+  world.add(make_shared<Sphere>(Point3(0, -100.5, -1), 100));
+
   // Render
 
   image_file << "P3\n" << IMAGE_WIDTH << ' ' << IMAGE_HEIGHT << "\n255\n";
@@ -93,7 +84,7 @@ int main(int argc, char * argv[]) {
       const Point3 pixel_center = pixel00_loc + (col * pixel_delta_u) + (row * pixel_delta_v);
       const Vector3 ray_direction = pixel_center - camera_center;
       const Ray ray(camera_center, ray_direction);
-      const Color pixel_color = ray_color(ray);
+      const Color pixel_color = ray_color(ray, world);
 
       write_color(image_file, pixel_color);
     }

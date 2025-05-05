@@ -2,7 +2,6 @@
 #define SPHERE_H_
 
 #include "entity.h"
-#include "vector3.h"
 
 class Sphere : public Entity {
   public:
@@ -11,7 +10,7 @@ class Sphere : public Entity {
       radius(std::fmax(0, radius)) {
       }
 
-    bool hit(const Ray&r, double ray_time, double ray_tmax, HitRecord& rec) const override {
+    bool hit(const Ray&r, double ray_tmin, double ray_tmax, HitRecord& rec) const override {
       const Vector3& d = r.direction();
       const Vector3& Q = r.origin();
       const Vector3 oc = (center - Q);
@@ -25,7 +24,7 @@ class Sphere : public Entity {
         return false;
       }
 
-      const double sqrtd = std::squrt(discriminant);
+      const double sqrtd = std::sqrt(discriminant);
 
       // check either of the roots are inside the range
 
@@ -40,7 +39,7 @@ class Sphere : public Entity {
       rec.t = root;
       rec.p = r.at(rec.t);
       Vector3 outward_normal = (rec.p - center) / radius;
-      rect.set_face_normal(r, outward_normal);
+      rec.set_face_normal(r, outward_normal);
       return true;
     }
 

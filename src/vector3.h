@@ -1,9 +1,6 @@
 #ifndef VECTOR3_H_
 #define VECTOR3_H_
 
-#include <iostream>
-#include <cmath>
-
 class Vector3 {
   public:
     double e[3];
