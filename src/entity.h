@@ -17,7 +17,7 @@ class HitRecord {
 class Entity {
   public:
     virtual ~Entity() = default;
-    virtual bool hit(const Ray& r, double ray_tmin, double ray_tmax, HitRecord &rec) const = 0;
+    virtual bool hit(const Ray& r, Interval ray_t, HitRecord &rec) const = 0;
 };
 
 #endif //!ENTITY_H

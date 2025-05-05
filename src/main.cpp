@@ -17,7 +17,7 @@ Color gradient(const Color& start_color, const Color& end_color, double a) {
 
 Color ray_color(const Ray& r, const Entity& world) {
   HitRecord rec;
-  if (world.hit(r, 0, infinity, rec)) {
+  if (world.hit(r, Interval(0, infinity), rec)) {
     const Vector3 n = rec.normal;
     return 0.5 * Color(n.x() + 1, n.y() + 1, n.z() + 1);
   }

@@ -24,13 +24,13 @@ class EntityList: public Entity {
       list.push_back(entity);
     }
 
-    bool hit(const Ray& r, double ray_tmin, double ray_tmax, HitRecord& rec) const override {
+    bool hit(const Ray& r, Interval ray_t, HitRecord& rec) const override {
       HitRecord temp_record;
       bool hit_anything = false;
-      double closest_so_far = ray_tmax;
+      double closest_so_far = ray_t.max;
 
       for (const auto& e : list) {
-        if (e->hit(r, ray_tmin, closest_so_far, temp_record)) {
+        if (e->hit(r, Interval(ray_t.min, closest_so_far), temp_record)) {
           hit_anything = true;
           closest_so_far = temp_record.t;
           rec = temp_record;

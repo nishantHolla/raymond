@@ -10,7 +10,7 @@ class Sphere : public Entity {
       radius(std::fmax(0, radius)) {
       }
 
-    bool hit(const Ray&r, double ray_tmin, double ray_tmax, HitRecord& rec) const override {
+    bool hit(const Ray&r, Interval ray_t, HitRecord& rec) const override {
       const Vector3& d = r.direction();
       const Vector3& Q = r.origin();
       const Vector3 oc = (center - Q);
@@ -29,9 +29,9 @@ class Sphere : public Entity {
       // check either of the roots are inside the range
 
       double root = (h - sqrtd) / a;
-      if (root <= ray_tmin || root >= ray_tmax) {
+      if (!ray_t.surrounds(root)) {
         root = (h + sqrtd) / a;
-        if (root <= ray_tmin || root >= ray_tmax) {
+        if (!ray_t.surrounds(root)) {
           return false;
         }
       }
