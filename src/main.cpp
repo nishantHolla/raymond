@@ -1,5 +1,7 @@
 #include <iostream>
 
+#include "vector3.h"
+
 // Image
 
 const int IMAGE_WIDTH = 256;
