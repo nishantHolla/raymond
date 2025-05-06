@@ -22,7 +22,7 @@ int main(int argc, char * argv[]) {
 
   Camera camera;
   camera.aspect_ratio = 16.0 / 9.0;
-  camera.image_width = 800;
+  camera.image_width = 1920;
   camera.samples_per_pixel = 100;
 
   camera.render(world, argv[1]);

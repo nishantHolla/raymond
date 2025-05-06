@@ -6,6 +6,7 @@
 #include <iostream>
 #include <limits>
 #include <memory>
+#include <iomanip>
 
 // C++ STD Usings
 
@@ -29,6 +30,29 @@ inline double random_double() {
 
 inline double random_double(double min, double max) {
   return min + (max - min) * random_double();
+}
+
+void display_progress(int current, int total) {
+  static const int PROGRESS_SIZE = 20;
+  if (current == total) {
+    std::clog << "\rDone                                                       \n";
+    return;
+  }
+
+  std::clog << "\rProgress: [";
+
+  int full = (double(current) / total) * PROGRESS_SIZE;
+  int empty = PROGRESS_SIZE - full;
+
+  for (int i = 0; i < full; i++) {
+    std::clog << '=';
+  }
+  for (int j = 0; j < empty; j++) {
+    std::clog << ' ';
+  }
+  std::clog << "] "
+    << std::setprecision(2) << double(current) / total * 100 << "%       "
+    << std::flush;
 }
 
 // Headers

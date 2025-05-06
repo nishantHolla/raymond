@@ -21,7 +21,7 @@ class Camera {
       image_file << "P3\n" << image_width << ' ' << image_height << "\n255\n";
 
       for (int row = 0; row < image_height; row++) {
-        std::clog << "\rScannlines remaining: " << (image_height - row) << ' ' << std::flush;
+        display_progress(row, image_height - 1);
 
         for (int col = 0; col < image_width; col++) {
 
@@ -34,7 +34,7 @@ class Camera {
           write_color(image_file, pixel_color * pixel_samples_scale);
         }
       }
-      std::clog << "\rDone                            \n";
+
       image_file.close();
     }
 
