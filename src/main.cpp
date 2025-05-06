@@ -28,9 +28,9 @@ int main(int argc, char * argv[]) {
 
   EntityList world;
   world.add(make_shared<Sphere>(Point3(0, 0, -1), 0.5, diff_blue_mat));
-  world.add(make_shared<Sphere>(Point3(-1, 0, -1), 0.5, clear_metal_mat));
-  world.add(make_shared<Sphere>(Point3(1, 0, -1), 0.5, dielectric_mat));
-  world.add(make_shared<Sphere>(Point3(1, 0, -1), 0.4, air_mat));
+  world.add(make_shared<Sphere>(Point3(-1, 0, -1), 0.5, dielectric_mat));
+  world.add(make_shared<Sphere>(Point3(1, 0, -1), 0.5, clear_metal_mat));
+  world.add(make_shared<Sphere>(Point3(-1, 0, -1), 0.4, air_mat));
   world.add(make_shared<Sphere>(Point3(0, -100.5, -1), 100, ground_mat));
 
   Camera camera;
@@ -38,6 +38,10 @@ int main(int argc, char * argv[]) {
   camera.image_width = 800;
   camera.samples_per_pixel = 100;
   camera.max_depth = 50;
+  camera.lookfrom = Point3(-2, 2, 1);
+  camera.lookat = Point3(0, 0, -1);
+  camera.vup = Vector3(0, 1, 0);
+  camera.vfov = 20;
 
   camera.render(world, argv[1]);
 

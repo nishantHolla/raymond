@@ -10,6 +10,10 @@ class Camera {
     int image_width = 100;
     int samples_per_pixel = 10;
     int max_depth = 10;
+    double vfov = 90; // vertical field of view
+    Point3 lookfrom = Point3(0, 0, 0);
+    Point3 lookat = Point3(0, 0, -1);
+    Vector3 vup = Vector3(0, 1, 0);
 
     void render(const Entity& world, const std::string& file_path) {
       initialize();
@@ -47,21 +51,28 @@ class Camera {
     double pixel_samples_scale;
     Vector3 pixel_delta_u;
     Vector3 pixel_delta_v;
+    Vector3 u, v, w;
 
     void initialize() {
       image_height = int(image_width / aspect_ratio);
       image_height = (image_height < 1) ? 1 : image_height;
       pixel_samples_scale = 1.0 / samples_per_pixel;
 
-      center = Point3(0, 0, 0);
+      center = lookfrom;
 
-      double focal_length = 1.0;
-      double viewport_height = 2.0;
+      double focal_length = (lookfrom - lookat).length();
+      double theta = degrees_to_radians(vfov);
+      double h = std::tan(theta/2);
+      double viewport_height = 2 * h * focal_length;
       double viewport_width = viewport_height * (double(image_width) / image_height);
 
-      const Vector3 viewport_u = Vector3(viewport_width, 0, 0); // horizontal
-      const Vector3 viewport_v = Vector3(0, -viewport_height, 0); // vertical
-      const Point3 viewport_upper_left = center - Vector3(0, 0, focal_length) - viewport_u / 2 - viewport_v / 2;
+      w = unit_vector(lookfrom - lookat);
+      u = unit_vector(cross(vup, w));
+      v = cross(w, u);
+
+      const Vector3 viewport_u = viewport_width * u; // horizontal
+      const Vector3 viewport_v = viewport_height * -v; // vertical
+      const Point3 viewport_upper_left = center - (focal_length * w) - viewport_u / 2 - viewport_v / 2;
 
       pixel_delta_u = viewport_u / image_width;
       pixel_delta_v = viewport_v / image_height;
