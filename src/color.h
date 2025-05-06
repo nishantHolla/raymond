@@ -102,9 +102,10 @@ void write_color(std::ostream& out, const Color& pixel_color) {
   const double g = pixel_color.g();
   const double b = pixel_color.b();
 
-  const int ir = int(255.999 * r);
-  const int ig = int(255.999 * g);
-  const int ib = int(255.999 * b);
+  static const Interval intensity(0.000, 0.999);
+  const int ir = int(256 * intensity.clamp(r));
+  const int ig = int(256 * intensity.clamp(g));
+  const int ib = int(256 * intensity.clamp(b));
 
   out << ir << ' ' << ig << ' ' << ib << '\n';
 }
