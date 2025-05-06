@@ -8,6 +8,7 @@ class Camera {
     double aspect_ratio = 1.0;
     int image_width = 100;
     int samples_per_pixel = 10;
+    int max_depth = 10;
 
     void render(const Entity& world, const std::string& file_path) {
       initialize();
@@ -28,7 +29,7 @@ class Camera {
           Color pixel_color(0, 0, 0);
           for (int sample = 0; sample < samples_per_pixel; sample++) {
             Ray r = get_ray(col, row);
-            pixel_color += ray_color(r, world);
+            pixel_color += ray_color(r, max_depth, world);
           }
 
           write_color(image_file, pixel_color * pixel_samples_scale);
@@ -86,12 +87,16 @@ class Camera {
       return (1.0 - a) * end_color + a * start_color; // linear interpolation or "lerp" for short
     }
 
-    Color ray_color(const Ray& r, const Entity &world) const {
+    Color ray_color(const Ray& r, int depth, const Entity &world) const {
+      if (depth <= 0) {
+        return Color(0, 0, 0);
+      }
+
       HitRecord rec;
 
-      if (world.hit(r, Interval(0, infinity), rec)) {
-        const Vector3 n = rec.normal;
-        return 0.5 * Color(n.x() + 1, n.y() + 1, n.z() + 1);
+      if (world.hit(r, Interval(0.001, infinity), rec)) {
+        Vector3 direction = random_on_hemisphere(rec.normal);
+        return 0.5 * ray_color(Ray(rec.p, direction), depth-1, world);
       }
 
       Vector3 unit_direction = unit_vector(r.direction());
