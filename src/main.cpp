@@ -21,13 +21,16 @@ int main(int argc, char * argv[]) {
   const shared_ptr<Material> diff_blue_mat = make_shared<Lambertian>(Color(0.1, 0.2, 0.5));
   const shared_ptr<Material> clear_metal_mat = make_shared<Metal>(Color(0.8, 0.8, 0.8), 0.3);
   const shared_ptr<Material> metal_mat = make_shared<Metal>(Color(0.8, 0.6, 0.2), 1.0);
+  const shared_ptr<Material> dielectric_mat = make_shared<Dielectric>(1.50);
+  const shared_ptr<Material> air_mat = make_shared<Dielectric>(1/1.50);
 
   // Setup world
 
   EntityList world;
   world.add(make_shared<Sphere>(Point3(0, 0, -1), 0.5, diff_blue_mat));
   world.add(make_shared<Sphere>(Point3(-1, 0, -1), 0.5, clear_metal_mat));
-  world.add(make_shared<Sphere>(Point3(1, 0, -1), 0.5, metal_mat));
+  world.add(make_shared<Sphere>(Point3(1, 0, -1), 0.5, dielectric_mat));
+  world.add(make_shared<Sphere>(Point3(1, 0, -1), 0.4, air_mat));
   world.add(make_shared<Sphere>(Point3(0, -100.5, -1), 100, ground_mat));
 
   Camera camera;
