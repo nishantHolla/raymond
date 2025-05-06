@@ -31,7 +31,7 @@ int main(int argc, char * argv[]) {
   world.add(make_shared<Sphere>(Point3(-1, 0, -1), 0.5, dielectric_mat));
   world.add(make_shared<Sphere>(Point3(1, 0, -1), 0.5, clear_metal_mat));
   world.add(make_shared<Sphere>(Point3(-1, 0, -1), 0.4, air_mat));
-  world.add(make_shared<Sphere>(Point3(0, -100.5, -1), 100, ground_mat));
+  world.add(make_shared<Sphere>(Point3(0, -1000.5, -1), 1000, ground_mat));
 
   Camera camera;
   camera.aspect_ratio = 16.0 / 9.0;
@@ -42,6 +42,8 @@ int main(int argc, char * argv[]) {
   camera.lookat = Point3(0, 0, -1);
   camera.vup = Vector3(0, 1, 0);
   camera.vfov = 20;
+  camera.defocus_angle = 10.0;
+  camera.defocus_dist = 3.4;
 
   camera.render(world, argv[1]);
 

@@ -166,4 +166,13 @@ inline Vector3 refract(const Vector3& uv, const Vector3& n, double etai_over_eta
   return r_out_perp + r_out_parallel;
 }
 
+inline Vector3 random_in_unit_disk() {
+  while (true) {
+    Vector3 p = Vector3(random_double(-1, 1), random_double(-1, 1), 0);
+    if (p.length_squared() < 1) {
+      return p;
+    }
+  }
+}
+
 #endif //!VECTOR3_H_

@@ -15,6 +15,9 @@ class Camera {
     Point3 lookat = Point3(0, 0, -1);
     Vector3 vup = Vector3(0, 1, 0);
 
+    double defocus_angle = 0;
+    double defocus_dist = 10;
+
     void render(const Entity& world, const std::string& file_path) {
       initialize();
 
@@ -52,6 +55,8 @@ class Camera {
     Vector3 pixel_delta_u;
     Vector3 pixel_delta_v;
     Vector3 u, v, w;
+    Vector3 defocus_disk_u;
+    Vector3 defocus_disk_v;
 
     void initialize() {
       image_height = int(image_width / aspect_ratio);
@@ -60,10 +65,9 @@ class Camera {
 
       center = lookfrom;
 
-      double focal_length = (lookfrom - lookat).length();
       double theta = degrees_to_radians(vfov);
       double h = std::tan(theta/2);
-      double viewport_height = 2 * h * focal_length;
+      double viewport_height = 2 * h * defocus_dist;
       double viewport_width = viewport_height * (double(image_width) / image_height);
 
       w = unit_vector(lookfrom - lookat);
@@ -72,11 +76,16 @@ class Camera {
 
       const Vector3 viewport_u = viewport_width * u; // horizontal
       const Vector3 viewport_v = viewport_height * -v; // vertical
-      const Point3 viewport_upper_left = center - (focal_length * w) - viewport_u / 2 - viewport_v / 2;
+      const Point3 viewport_upper_left = center - (defocus_dist * w) - viewport_u / 2 - viewport_v / 2;
 
       pixel_delta_u = viewport_u / image_width;
       pixel_delta_v = viewport_v / image_height;
       pixel00_loc = viewport_upper_left +  0.5 * (pixel_delta_u + pixel_delta_v);
+
+
+      double defocus_radius = defocus_dist * std::tan(degrees_to_radians(defocus_angle/2));
+      defocus_disk_u = u * defocus_radius;
+      defocus_disk_v = v * defocus_radius;
     }
 
     Ray get_ray(int i, int j) const {
@@ -85,7 +94,7 @@ class Camera {
         + ((i + offset.x()) * pixel_delta_u)
         + ((j + offset.y()) * pixel_delta_v);
 
-      const Point3 ray_origin = center;
+      const Point3 ray_origin = (defocus_angle <= 0) ? center : defocus_disk_sample();
       const Vector3 ray_direction = pixel_sample - ray_origin;
 
       return Ray(ray_origin, ray_direction);
@@ -93,6 +102,11 @@ class Camera {
 
     Vector3 sample_square() const {
       return Vector3(random_double() - 0.5, random_double() - 0.5, 0);
+    }
+
+    Point3 defocus_disk_sample() const {
+      Point3 p = random_in_unit_disk();
+      return center + (p[0] * defocus_disk_u) + (p[1] * defocus_disk_v);
     }
 
     Color gradient(const Color& start_color, const Color& end_color, double a) const {
