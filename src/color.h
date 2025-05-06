@@ -97,15 +97,27 @@ inline Color operator/(const Color& v, double t) {
   return (1/t) * v;
 }
 
+inline double linear_to_gamma(double linear_component) {
+  if (linear_component > 0) {
+    return std::sqrt(linear_component);
+  }
+
+  return 0;
+}
+
 void write_color(std::ostream& out, const Color& pixel_color) {
   const double r = pixel_color.r();
   const double g = pixel_color.g();
   const double b = pixel_color.b();
 
+  const double gamma_r = linear_to_gamma(r);
+  const double gamma_g = linear_to_gamma(g);
+  const double gamma_b = linear_to_gamma(b);
+
   static const Interval intensity(0.000, 0.999);
-  const int ir = int(256 * intensity.clamp(r));
-  const int ig = int(256 * intensity.clamp(g));
-  const int ib = int(256 * intensity.clamp(b));
+  const int ir = int(256 * intensity.clamp(gamma_r));
+  const int ig = int(256 * intensity.clamp(gamma_g));
+  const int ib = int(256 * intensity.clamp(gamma_b));
 
   out << ir << ' ' << ig << ' ' << ib << '\n';
 }
