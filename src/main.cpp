@@ -4,6 +4,7 @@
 #include "camera.h"
 #include "entity.h"
 #include "entity_list.h"
+#include "material.h"
 #include "sphere.h"
 
 int main(int argc, char * argv[]) {
@@ -14,11 +15,20 @@ int main(int argc, char * argv[]) {
     return 1;
   }
 
+  // Materials
+
+  const shared_ptr<Material> ground_mat = make_shared<Lambertian>(Color(0.8, 0.8, 0.0));
+  const shared_ptr<Material> diff_blue_mat = make_shared<Lambertian>(Color(0.1, 0.2, 0.5));
+  const shared_ptr<Material> clear_metal_mat = make_shared<Metal>(Color(0.8, 0.8, 0.8));
+  const shared_ptr<Material> metal_mat = make_shared<Metal>(Color(0.8, 0.6, 0.2));
+
   // Setup world
 
   EntityList world;
-  world.add(make_shared<Sphere>(Point3(0, 0, -1), 0.5));
-  world.add(make_shared<Sphere>(Point3(0, -100.5, -1), 100));
+  world.add(make_shared<Sphere>(Point3(0, 0, -1), 0.5, diff_blue_mat));
+  world.add(make_shared<Sphere>(Point3(-1, 0, -1), 0.5, clear_metal_mat));
+  world.add(make_shared<Sphere>(Point3(1, 0, -1), 0.5, metal_mat));
+  world.add(make_shared<Sphere>(Point3(0, -100.5, -1), 100, ground_mat));
 
   Camera camera;
   camera.aspect_ratio = 16.0 / 9.0;

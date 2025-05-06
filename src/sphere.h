@@ -5,9 +5,10 @@
 
 class Sphere : public Entity {
   public:
-    Sphere(const Point3& center, double radius) :
+    Sphere(const Point3& center, double radius, shared_ptr<Material> mat) :
       center(center),
-      radius(std::fmax(0, radius)) {
+      radius(std::fmax(0, radius)),
+      mat(mat) {
       }
 
     bool hit(const Ray&r, Interval ray_t, HitRecord& rec) const override {
@@ -40,12 +41,15 @@ class Sphere : public Entity {
       rec.p = r.at(rec.t);
       Vector3 outward_normal = (rec.p - center) / radius;
       rec.set_face_normal(r, outward_normal);
+      rec.mat = mat;
+
       return true;
     }
 
   private:
     Point3 center;
     double radius;
+    shared_ptr<Material> mat;
 };
 
 #endif //!SPHERE_H_
