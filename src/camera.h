@@ -95,7 +95,7 @@ class Camera {
       HitRecord rec;
 
       if (world.hit(r, Interval(0.001, infinity), rec)) {
-        Vector3 direction = random_on_hemisphere(rec.normal);
+        Vector3 direction = rec.normal + random_unit_vector();
         return 0.5 * ray_color(Ray(rec.p, direction), depth-1, world);
       }
 
