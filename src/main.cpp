@@ -19,8 +19,8 @@ int main(int argc, char * argv[]) {
 
   const shared_ptr<Material> ground_mat = make_shared<Lambertian>(Color(0.8, 0.8, 0.0));
   const shared_ptr<Material> diff_blue_mat = make_shared<Lambertian>(Color(0.1, 0.2, 0.5));
-  const shared_ptr<Material> clear_metal_mat = make_shared<Metal>(Color(0.8, 0.8, 0.8));
-  const shared_ptr<Material> metal_mat = make_shared<Metal>(Color(0.8, 0.6, 0.2));
+  const shared_ptr<Material> clear_metal_mat = make_shared<Metal>(Color(0.8, 0.8, 0.8), 0.3);
+  const shared_ptr<Material> metal_mat = make_shared<Metal>(Color(0.8, 0.6, 0.2), 1.0);
 
   // Setup world
 
