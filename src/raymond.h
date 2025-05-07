@@ -8,30 +8,48 @@
 #include <memory>
 #include <iomanip>
 
-// C++ STD Usings
+// ==============================
+// Using statements
+// ==============================
 
 using std::make_shared;
 using std::shared_ptr;
 
+// ==============================
 // Constants
+// ==============================
 
 const double infinity = std::numeric_limits<double>::infinity();
 const double pi = 3.1415926535897932385;
 
-// Utility Functions
+// ==============================
+// Utility functions
+// ==============================
 
+/*
+ * Conversts the given degrees value to radians.
+ */
 inline double degrees_to_radians(double degrees) {
   return degrees * pi / 180.0;
 }
 
+/*
+ * Returns a random double between the range [0, 1).
+ */
 inline double random_double() {
   return std::rand() / (RAND_MAX + 1.0);
 }
 
+/*
+ * Returns a random double between the range [min, max).
+ */
 inline double random_double(double min, double max) {
   return min + (max - min) * random_double();
 }
 
+/*
+ * Displays the progress line to stdout depending on the given current line and total number of lines.
+ */
 void display_progress(int current, int total) {
   static const int PROGRESS_SIZE = 20;
   if (current == total) {
@@ -55,14 +73,18 @@ void display_progress(int current, int total) {
     << std::flush;
 }
 
+// ==============================
 // Headers
+// ==============================
 
 #include "interval.h"
 #include "color.h"
 #include "ray.h"
 #include "vector3.h"
 
+// ==============================
 // Colors
+// ==============================
 
 const Color COLOR_PURE_RED = Color(1.0, 0.0, 0.0);
 const Color COLOR_PURE_GREEN = Color(0.0, 1.0, 0.0);
