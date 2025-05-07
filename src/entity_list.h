@@ -5,25 +5,46 @@
 
 #include <vector>
 
+// ==============================
+// Entity class
+// (derived from Entity class)
+// ==============================
+
 class EntityList: public Entity {
   public:
-    std::vector<shared_ptr<Entity>> list;
+    std::vector<shared_ptr<Entity>> list; // List of entity objects
 
+    /*
+     * Constructs the entity list object with empty list.
+     */
     EntityList() {
     }
 
+    /*
+     * Constructs the entity list object with the given entity as initial object in the list.
+     */
     EntityList(shared_ptr<Entity> entity) {
       add(entity);
     }
 
+    /*
+     * Removes all entities in the list.
+     */
     void clear() {
       list.clear();
     }
 
+    /*
+     * Adds the given entity to the list.
+     */
     void add(shared_ptr<Entity> entity) {
       list.push_back(entity);
     }
 
+    /*
+     * Loops through all entities in the list and calls its hit function.
+     * Records the hit with the nearest distance for the given ray at the given interval.
+     */
     bool hit(const Ray& r, Interval ray_t, HitRecord& rec) const override {
       HitRecord temp_record;
       bool hit_anything = false;
