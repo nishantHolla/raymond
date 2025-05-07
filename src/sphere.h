@@ -3,14 +3,27 @@
 
 #include "entity.h"
 
+// ==============================
+// Sphere class
+// (derived from Entity class)
+// ==============================
+
 class Sphere : public Entity {
   public:
+    /*
+     * Constructs the sphere with the given center, radius and surface material.
+     */
     Sphere(const Point3& center, double radius, shared_ptr<Material> mat) :
       center(center),
       radius(std::fmax(0, radius)),
       mat(mat) {
       }
 
+    /*
+     * Checks if the given ray hits the shpere in the given interval of time and records the hit
+     * int the HitRecord.
+     * Returns true if the ray hits, else returns false.
+     */
     bool hit(const Ray&r, Interval ray_t, HitRecord& rec) const override {
       const Vector3& d = r.direction();
       const Vector3& Q = r.origin();
@@ -47,9 +60,9 @@ class Sphere : public Entity {
     }
 
   private:
-    Point3 center;
-    double radius;
-    shared_ptr<Material> mat;
+    Point3 center;             // center of the sphere
+    double radius;             // radius of the sphere
+    shared_ptr<Material> mat;  // surface material of the sphere
 };
 
 #endif //!SPHERE_H_
