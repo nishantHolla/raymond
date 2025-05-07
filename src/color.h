@@ -1,34 +1,54 @@
 #ifndef COLOR_H_
 #define COLOR_H_
 
+// ==============================
+// Color class
+// ==============================
+
 class Color {
   public:
-    double e[3];
+    double e[3]; // R, G, B values of the color in [0, 1] range.
 
+    /*
+     * Constructs the color to be black if no arguments are passed.
+     */
     Color() :
       e{0, 0, 0} {
       }
 
+    /*
+     * Constructs the color with given values of red, green and blue.
+     */
     Color(double r, double g, double b) :
       e{r, g, b} {
       }
 
+    /*
+     * Returns the red value of the current color.
+     */
     double r() const {
       return e[0];
     }
 
+    /*
+     * Returns the green value of the current color.
+     */
     double g() const {
       return e[1];
     }
 
+    /*
+     * Returns the blue value of the current color.
+     */
     double b() const {
       return e[2];
     }
 
-    Color operator-() const {
-      return Color(-e[0], -e[1], -e[2]);
-    }
 
+    /*
+     * Operator overload of [] to return individual values of the current color.
+     * Throws runtime_error if the accessed index is out of bound.
+     */
     double operator[](int i) const {
       if (i < 0 || i > 2) {
         throw std::runtime_error("Color index out of bound");
@@ -37,6 +57,10 @@ class Color {
       return e[i];
     }
 
+    /*
+     * Operator overload of [] to return refernece to individual values of the current color.
+     * Throws runtime_error if the accessed index is out of bound.
+     */
     double& operator[](int i) {
       if (i < 0 || i > 2) {
         throw std::runtime_error("Color index out of bound");
@@ -45,6 +69,9 @@ class Color {
       return e[i];
     }
 
+    /*
+     * Operator overload of += to add a color to the current color.
+     */
     Color& operator+=(const Color& v) {
       e[0] += v.e[0];
       e[1] += v.e[1];
@@ -53,6 +80,9 @@ class Color {
       return *this;
     }
 
+    /*
+     * Operator overload of *= to the current color by a scalar value.
+     */
     Color& operator*=(double t) {
       e[0] *= t;
       e[1] *= t;
@@ -61,42 +91,71 @@ class Color {
       return *this;
     }
 
+    /*
+     * Operator overload of /= to divide the current color by a scalar value.
+     */
     Color& operator/=(double t) {
       return *this *= (1/t);
     }
 
 };
 
+// ==============================
 // Color utility functions
+// ==============================
 
+/*
+ * Operator overload of << of ostream to print the components of the given color.
+ */
 inline std::ostream& operator<<(std::ostream& out, const Color& v) {
   return out << v.e[0] << ' ' << v.e[1] << ' ' << v.e[2];
 }
 
+/*
+ * Operator overload of + to add two colors.
+ */
 inline Color operator+(const Color& u, const Color& v) {
   return Color(u.e[0] + v.e[0], u.e[1] + v.e[1], u.e[2] + v.e[2]);
 }
 
+/*
+ * Operator overload of - to subtract two colors.
+ */
 inline Color operator-(const Color& u, const Color& v) {
   return Color(u.e[0] - v.e[0], u.e[1] - v.e[1], u.e[2] - v.e[2]);
 }
 
+/*
+ * Opeartor overload of * to multiply two colors.
+ */
 inline Color operator*(const Color& u, const Color& v) {
   return Color(u.e[0] * v.e[0], u.e[1] * v.e[1], u.e[2] * v.e[2]);
 }
 
+/*
+ * Opeartor overload of * to multiply a color by a scalar.
+ */
 inline Color operator*(double t, const Color& v) {
   return Color(t * v.e[0], t * v.e[1], t * v.e[2]);
 }
 
+/*
+ * Opeartor overload of * to multiply a color by a scalar.
+ */
 inline Color operator*(const Color& v, double t) {
   return t * v;
 }
 
+/*
+ * Opeartor overload of * to divide a color by a scalar.
+ */
 inline Color operator/(const Color& v, double t) {
   return (1/t) * v;
 }
 
+/*
+ * Converts the component of color in linear space to gamma space.
+ */
 inline double linear_to_gamma(double linear_component) {
   if (linear_component > 0) {
     return std::sqrt(linear_component);
@@ -105,6 +164,9 @@ inline double linear_to_gamma(double linear_component) {
   return 0;
 }
 
+/*
+ * Writes the components of given color to the given output stream after converting to gamma space.
+ */
 void write_color(std::ostream& out, const Color& pixel_color) {
   const double r = pixel_color.r();
   const double g = pixel_color.g();
