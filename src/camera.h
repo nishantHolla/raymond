@@ -16,7 +16,7 @@ class Camera {
     Vector3 vup = Vector3(0, 1, 0);
 
     double defocus_angle = 0;
-    double defocus_dist = 10;
+    double focus_dist = 10;
 
     void render(const Entity& world, const std::string& file_path) {
       initialize();
@@ -67,7 +67,7 @@ class Camera {
 
       double theta = degrees_to_radians(vfov);
       double h = std::tan(theta/2);
-      double viewport_height = 2 * h * defocus_dist;
+      double viewport_height = 2 * h * focus_dist;
       double viewport_width = viewport_height * (double(image_width) / image_height);
 
       w = unit_vector(lookfrom - lookat);
@@ -76,14 +76,14 @@ class Camera {
 
       const Vector3 viewport_u = viewport_width * u; // horizontal
       const Vector3 viewport_v = viewport_height * -v; // vertical
-      const Point3 viewport_upper_left = center - (defocus_dist * w) - viewport_u / 2 - viewport_v / 2;
+      const Point3 viewport_upper_left = center - (focus_dist * w) - viewport_u / 2 - viewport_v / 2;
 
       pixel_delta_u = viewport_u / image_width;
       pixel_delta_v = viewport_v / image_height;
       pixel00_loc = viewport_upper_left +  0.5 * (pixel_delta_u + pixel_delta_v);
 
 
-      double defocus_radius = defocus_dist * std::tan(degrees_to_radians(defocus_angle/2));
+      double defocus_radius = focus_dist * std::tan(degrees_to_radians(defocus_angle/2));
       defocus_disk_u = u * defocus_radius;
       defocus_disk_v = v * defocus_radius;
     }
