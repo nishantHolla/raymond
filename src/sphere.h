@@ -11,10 +11,19 @@
 class Sphere : public Entity {
   public:
     /*
-     * Constructs the sphere with the given center, radius and surface material.
+     * Constructs stationary sphere with the given center, radius and surface material.
      */
     Sphere(const Point3& center, double radius, shared_ptr<Material> mat) :
-      center(center),
+      center(center, Vector3(0, 0, 0)),
+      radius(std::fmax(0, radius)),
+      mat(mat) {
+      }
+
+    /*
+     * Constructs moving sphere with the given initial center, final center2, radius and surface material.
+     */
+    Sphere(const Point3& center1, const Point3& center2, double radius, shared_ptr<Material> mat) :
+      center(center1, center2 - center1),
       radius(std::fmax(0, radius)),
       mat(mat) {
       }
@@ -25,9 +34,11 @@ class Sphere : public Entity {
      * Returns true if the ray hits, else returns false.
      */
     bool hit(const Ray&r, Interval ray_t, HitRecord& rec) const override {
+      Point3 current_center = center.at(r.time());
+
       const Vector3& d = r.direction();
       const Vector3& Q = r.origin();
-      const Vector3 oc = (center - Q);
+      const Vector3 oc = (current_center - Q);
 
       const double a = d.length_squared(); // same as dot(a, a)
       const double h = dot(d, oc); // b = -2h
@@ -52,7 +63,7 @@ class Sphere : public Entity {
 
       rec.t = root;
       rec.p = r.at(rec.t);
-      Vector3 outward_normal = (rec.p - center) / radius;
+      Vector3 outward_normal = (rec.p - current_center) / radius;
       rec.set_face_normal(r, outward_normal);
       rec.mat = mat;
 
@@ -60,7 +71,7 @@ class Sphere : public Entity {
     }
 
   private:
-    Point3 center;             // center of the sphere
+    Ray center;             // center of the sphere
     double radius;             // radius of the sphere
     shared_ptr<Material> mat;  // surface material of the sphere
 };

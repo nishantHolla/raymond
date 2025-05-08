@@ -55,7 +55,7 @@ class Lambertian : public Material {
       }
 
       // set the scattered ray
-      scattered = Ray(record.p, scatter_direction);
+      scattered = Ray(record.p, scatter_direction, r_in.time());
 
       // color of the ray is same as albedo of the material
       attenuation = albedo;
@@ -99,7 +99,7 @@ class Metal : public Material {
       reflected = unit_vector(reflected) + (fuzz * random_unit_vector());
 
       // Set the scattered ray as the reflected ray
-      scattered = Ray(record.p, reflected);
+      scattered = Ray(record.p, reflected, r_in.time());
 
       // color of the ray is same as albedo of the material
       attenuation = albedo;
@@ -165,7 +165,7 @@ class Dielectric : public Material {
       }
 
       // Record the scatterd ray
-      scattered = Ray(record.p, direction);
+      scattered = Ray(record.p, direction, r_in.time());
 
       return true;
     }

@@ -34,19 +34,22 @@ int main(int argc, char * argv[]) {
           // diffuse
           Color albedo = Color(random_double(), random_double(), random_double());
           sphere_mat = make_shared<Lambertian>(albedo);
+          Point3 center2 = center + Vector3(0, random_double(0, 0.5), 0);
+          world.add(make_shared<Sphere>(center, center2, 0.2, sphere_mat));
         }
         else if (choose_mat < 0.95) {
           // metal
           Color albedo = Color(random_double(0.5, 1), random_double(0.5, 1), random_double(0.5, 1));
           double fuzz = random_double(0, 0.5);
           sphere_mat = make_shared<Metal>(albedo, fuzz);
+          world.add(make_shared<Sphere>(center, 0.2, sphere_mat));
         }
         else {
           // glass
           sphere_mat = make_shared<Dielectric>(1.5);
+          world.add(make_shared<Sphere>(center, 0.2, sphere_mat));
         }
 
-        world.add(make_shared<Sphere>(center, 0.2, sphere_mat));
       }
     }
   }
@@ -64,8 +67,8 @@ int main(int argc, char * argv[]) {
   Camera camera;
 
   camera.aspect_ratio = 16.0 / 9.0;
-  camera.image_width = 1200;
-  camera.samples_per_pixel = 500;
+  camera.image_width = 800;
+  camera.samples_per_pixel = 100;
   camera.max_depth = 50;
 
   camera.vfov = 20;
