@@ -6,6 +6,7 @@
 #include "entity_list.h"
 #include "material.h"
 #include "sphere.h"
+#include "bvh.h"
 
 int main(int argc, char * argv[]) {
   // Parse arguments
@@ -63,13 +64,15 @@ int main(int argc, char * argv[]) {
   shared_ptr<Material> material3 = make_shared<Metal>(Color(0.7, 0.6, 0.5), 0.0);
   world.add(make_shared<Sphere>(Point3(4, 1, 0), 1.0, material3));
 
+  world = EntityList(make_shared<BVH_Node>(world));
+
   // Setup camera
   Camera camera;
 
   camera.aspect_ratio = 16.0 / 9.0;
   camera.image_width = 800;
-  camera.samples_per_pixel = 100;
-  camera.max_depth = 50;
+  camera.samples_per_pixel = 10;
+  camera.max_depth = 10;
 
   camera.vfov = 20;
   camera.lookfrom = Point3(13, 2, 3);

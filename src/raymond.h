@@ -48,6 +48,13 @@ inline double random_double(double min, double max) {
 }
 
 /*
+ * Returns a random int between the range [min, max].
+ */
+inline int random_int(int min, int max) {
+  return int(random_double(min, max+1));
+}
+
+/*
  * Displays the progress line to stdout depending on the given current line and total number of lines.
  */
 void display_progress(int current, int total) {

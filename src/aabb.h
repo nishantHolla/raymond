@@ -1,6 +1,10 @@
 #ifndef AABB_H_
 #define AABB_H_
 
+// ==============================
+// Aabb class
+// ==============================
+
 class Aabb {
   public:
     Interval x, y, z;
@@ -88,6 +92,24 @@ class Aabb {
 
       return true;
     }
+
+    /*
+     * Returns the index of the longest axis of the bounding box.
+     */
+    int longest_axis() const {
+      if (x.size() > y.size()) {
+        return x.size() > z.size() ? 0 : 2;
+      }
+      else {
+        return y.size() > z.size() ? 1 : 2;
+      }
+    }
+
+    static const Aabb empty, universe; // empty bounding box and universe bounding box
 };
+
+
+const Aabb Aabb::empty = Aabb(Interval::empty, Interval::empty, Interval::empty);
+const Aabb Aabb::universe = Aabb(Interval::universe, Interval::universe, Interval::universe);
 
 #endif // !AABB_H_
