@@ -1,6 +1,7 @@
 #ifndef ENTITY_LIST_H_
 #define ENTITY_LIST_H_
 
+#include "aabb.h"
 #include "entity.h"
 
 #include <vector>
@@ -39,6 +40,7 @@ class EntityList: public Entity {
      */
     void add(shared_ptr<Entity> entity) {
       list.push_back(entity);
+      bound_box = Aabb(bound_box, entity->bounding_box());
     }
 
     /*
@@ -60,6 +62,16 @@ class EntityList: public Entity {
 
       return hit_anything;
     }
+
+    /*
+     * Returns the bounding box of the list of entities.
+     */
+    Aabb bounding_box() const override {
+      return bound_box;
+    }
+
+  private:
+    Aabb bound_box;  // bounding box of the list of entities
 };
 
 #endif //!ENTITY_LIST_H_

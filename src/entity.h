@@ -1,6 +1,8 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
+#include "aabb.h"
+
 class Material;
 
 // ==============================
@@ -39,6 +41,11 @@ class Entity {
      * Returns true if it hits, else returns false.
      */
     virtual bool hit(const Ray& r, Interval ray_t, HitRecord &rec) const = 0;
+
+    /*
+     * Returns the bounding box of the entity
+     */
+    virtual Aabb bounding_box() const = 0;
 };
 
 #endif //!ENTITY_H

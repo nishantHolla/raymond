@@ -17,6 +17,8 @@ class Sphere : public Entity {
       center(center, Vector3(0, 0, 0)),
       radius(std::fmax(0, radius)),
       mat(mat) {
+        Vector3 rvec = Vector3(radius, radius, radius);
+        bound_box = Aabb(center - rvec, center + rvec);
       }
 
     /*
@@ -26,6 +28,10 @@ class Sphere : public Entity {
       center(center1, center2 - center1),
       radius(std::fmax(0, radius)),
       mat(mat) {
+        Vector3 rvec = Vector3(radius, radius, radius);
+        Aabb box1(center.at(0) - rvec, center.at(0) + rvec);
+        Aabb box2(center.at(1) - rvec, center.at(1) + rvec);
+        bound_box=  Aabb(box1, box2);
       }
 
     /*
@@ -70,10 +76,19 @@ class Sphere : public Entity {
       return true;
     }
 
+    /*
+     * Returns the bounding box of the sphere
+     */
+    Aabb bounding_box() const override {
+      return bound_box;
+    }
+
   private:
-    Ray center;             // center of the sphere
+    Ray center;                // center of the sphere
     double radius;             // radius of the sphere
     shared_ptr<Material> mat;  // surface material of the sphere
+    Aabb bound_box;            // bounding box of the sphere
+
 };
 
 #endif //!SPHERE_H_

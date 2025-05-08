@@ -26,6 +26,14 @@ class Interval {
       }
 
     /*
+     * Constructs the interval object tightly enclosing the two given intervals.
+     */
+    Interval(const Interval &a, const Interval &b) {
+      min = std::fmin(a.min, b.min);
+      max = std::fmax(a.max, b.max);
+    }
+
+    /*
      * Returns the size of the interval
      */
     double size() const {
@@ -59,6 +67,14 @@ class Interval {
       }
 
       return x;
+    }
+
+    /*
+     * Expand current interval by gven delta amount and return new interval.
+     */
+    Interval expand(double delta) const {
+      double padding = delta / 2;
+      return Interval(min - padding, max + padding);
     }
 
     static const Interval empty; // Interval that contains no points
