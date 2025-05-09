@@ -2,6 +2,7 @@
 #define MATERIAL_H_
 
 #include "entity.h"
+#include "texture.h"
 
 // ==============================
 // Material class
@@ -35,7 +36,14 @@ class Lambertian : public Material {
      * Constructs the Lambertian material with the given albedo.
      */
     Lambertian(const Color &albedo) :
-      albedo(albedo) {
+      tex(make_shared<SolidColor>(albedo)) {
+      }
+
+    /*
+     * Constructs the Lambertian material with the given texture.
+     */
+    Lambertian(shared_ptr<Texture> tex) :
+      tex(tex) {
       }
 
     /*
@@ -57,16 +65,14 @@ class Lambertian : public Material {
       // set the scattered ray
       scattered = Ray(record.p, scatter_direction, r_in.time());
 
-      // color of the ray is same as albedo of the material
-      attenuation = albedo;
+      // get the color of the ray from the texture of the material
+      attenuation = tex->value(record.u, record.v, record.p);
 
       return true;
     }
 
   private:
-    Color albedo; // percentage of light reflected represented as color
-                  // Color(1, 1, 1) represents 100% reflection and
-                  // Color(0, 0, 0) represents 0% reflection
+    shared_ptr<Texture> tex; // texture of the material
 };
 
 // ==============================

@@ -15,6 +15,8 @@ class HitRecord {
     Vector3 normal;             // Normal vector at the point of hit with respect to the surface that got hit
     shared_ptr<Material> mat;   // Material of the surface that got hit
     double t;                   // Time unit at which the ray hit the surface
+    double u;                   // x coordinate of the hit on entity for texturing
+    double v;                   // y coordinate of the hit on entity for texturing
     bool front_face;            // Did the ray hit the front face or the back face of the surface
 
     /*

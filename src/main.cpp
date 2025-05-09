@@ -20,8 +20,10 @@ int main(int argc, char * argv[]) {
 
   EntityList world;
 
-  shared_ptr<Material> ground_mat = make_shared<Lambertian>(Color(0.5, 0.5, 0.5));
+  shared_ptr<Texture> checker = make_shared<CheckerTexture>(0.32, COLOR_PURE_RED, COLOR_BLACK);
+  shared_ptr<Material> ground_mat = make_shared<Lambertian>(checker);
   world.add(make_shared<Sphere>(Point3(0, -1000, 0), 1000, ground_mat));
+
 
   for (int a = -11; a < 11; a++) {
     for (int b = -11; b < 11; b++) {
