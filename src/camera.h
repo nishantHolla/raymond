@@ -147,7 +147,7 @@ class Camera {
      * Calculates the gradient color between a start and end color using linear interpolation
      */
     Color gradient(const Color& start_color, const Color& end_color, double a) const {
-      return (1.0 - a) * end_color + a * start_color; // linear interpolation or "lerp" for short
+      return (1.0 - a) * start_color + a * end_color; // linear interpolation or "lerp" for short
     }
 
     /*
@@ -181,7 +181,7 @@ class Camera {
       const double a = 0.5 * (unit_direction.y() + 1.0);
 
       // Return the gradient color
-      return gradient(COLOR_BLUE, COLOR_WHITE, a);
+      return gradient(COLOR_DARK_BLUE, COLOR_BLUE, a);
 
     }
 };

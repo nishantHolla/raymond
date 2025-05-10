@@ -1,6 +1,8 @@
 #ifndef TEXTURE_H_
 #define TEXTURE_H_
 
+#include "image.h"
+
 // ==============================
 // Texture class
 // ==============================
@@ -86,6 +88,43 @@ class CheckerTexture : public Texture {
     double inv_scale;           // inverse of the scale of the squares of the checker pattern
     shared_ptr<Texture> even;   // texture of even squares
     shared_ptr<Texture> odd;    // texture of odd squares
+};
+
+// ==============================
+// ImageTexture class
+// (derived from Texture class)
+// ==============================
+
+class ImageTexture : public Texture {
+  public:
+    /*
+     * Constructs the image texture with the given filepath to the image
+     */
+    ImageTexture(const char *filepath) :
+      image(filepath) {
+      }
+
+    /*
+     * Maps the 3d entity to a 2d surface and returns the color on the image for a given 3d point
+     */
+    Color value(double u, double v, const Point3& p) const override {
+      if (image.height() <= 0) {
+        return Color(0, 1, 1);
+      }
+
+      u = Interval(0, 1).clamp(u);
+      v = 1.0 - Interval(0, 1).clamp(v);
+
+      int i = int(u * image.width());
+      int j = int(v * image.height());
+      const unsigned char* pixel = image.pixel_data(i, j);
+
+      double color_scale = 1.0 / 255.0;
+      return Color(color_scale * pixel[0], color_scale * pixel[1], color_scale * pixel[2]);
+    }
+
+  private:
+    Image image; // hold the image that will be loaded
 };
 
 #endif //!TEXTURE_H_

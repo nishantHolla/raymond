@@ -10,6 +10,8 @@
 
 class Sphere : public Entity {
   public:
+    double rotation = 0.0;
+
     /*
      * Constructs stationary sphere with the given center, radius and surface material.
      */
@@ -71,9 +73,29 @@ class Sphere : public Entity {
       rec.p = r.at(rec.t);
       Vector3 outward_normal = (rec.p - current_center) / radius;
       rec.set_face_normal(r, outward_normal);
+      get_sphere_uv(outward_normal, rec.u, rec.v, rotation);
       rec.mat = mat;
 
       return true;
+    }
+
+    /*
+     * Maps a given 3d point in space to a 2d surface and stores the coordinates in u and v.
+     */
+    static void get_sphere_uv(const Point3& p, double& u, double& v, const double rotation = 0) {
+      double theta = std::acos(-p.y());
+      double phi = std::atan2(-p.z(), p.x()) + pi;
+
+      phi += rotation;
+
+      if (phi < 0) phi += 2 * pi;
+      if (phi >= 2 * pi) phi -= 2 * pi;
+
+      if (theta < 0) theta += 2 * pi;
+      if (theta >= 2 * pi) theta -= 2 * pi;
+
+      u = phi / (2 * pi);
+      v = theta / pi;
     }
 
     /*
