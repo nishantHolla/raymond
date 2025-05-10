@@ -2,6 +2,7 @@
 #define TEXTURE_H_
 
 #include "image.h"
+#include "perlin.h"
 
 // ==============================
 // Texture class
@@ -125,6 +126,21 @@ class ImageTexture : public Texture {
 
   private:
     Image image; // hold the image that will be loaded
+};
+
+class NoiseTexture : public Texture {
+  public:
+    NoiseTexture(double scale) :
+      scale(scale) {
+    }
+
+    Color value(double u, double v, const Point3& p) const override {
+      return Color(.5, .5, .5) * (1 + std::sin(scale * p.z() + 10 * noise.turb(p, 7)));
+    }
+
+  private:
+    Perlin noise;
+    double scale;
 };
 
 #endif //!TEXTURE_H_

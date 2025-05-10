@@ -20,12 +20,11 @@ int main(int argc, char * argv[]) {
 
   EntityList world;
 
-  shared_ptr<ImageTexture> earth_texture = make_shared<ImageTexture>("earthmap.jpg");
-  shared_ptr<Lambertian> earth_surface = make_shared<Lambertian>(earth_texture);
-  shared_ptr<Sphere> globe = make_shared<Sphere>(Point3(0, 0, 0), 2, earth_surface);
-  globe->rotation = degrees_to_radians(160);
+  shared_ptr<NoiseTexture> noise_tex = make_shared<NoiseTexture>(4);
+  shared_ptr<Lambertian> surface = make_shared<Lambertian>(noise_tex);
+  shared_ptr<Sphere> sphere = make_shared<Sphere>(Point3(0, 0, 0), 2, surface);
 
-  world.add(globe);
+  world.add(sphere);
   world = EntityList(make_shared<BVH_Node>(world));
 
   // Setup camera
