@@ -38,7 +38,7 @@ class Sphere : public Entity {
 
     /*
      * Checks if the given ray hits the shpere in the given interval of time and records the hit
-     * int the HitRecord.
+     * in the HitRecord.
      * Returns true if the ray hits, else returns false.
      */
     bool hit(const Ray&r, Interval ray_t, HitRecord& rec) const override {

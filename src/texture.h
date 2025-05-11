@@ -128,19 +128,30 @@ class ImageTexture : public Texture {
     Image image; // hold the image that will be loaded
 };
 
+// ==============================
+// NoiseTexture class
+// (derived from Texture class)
+// ==============================
+
 class NoiseTexture : public Texture {
   public:
+    /*
+     * Constructs the image texture with the given scale of the noise
+     */
     NoiseTexture(double scale) :
       scale(scale) {
     }
 
+    /*
+     * Maps the 3d entity to a 2d surface and returns the color of the noise for a given 3d point
+     */
     Color value(double u, double v, const Point3& p) const override {
       return Color(.5, .5, .5) * (1 + std::sin(scale * p.z() + 10 * noise.turb(p, 7)));
     }
 
   private:
-    Perlin noise;
-    double scale;
+    Perlin noise; // perlin noise generator
+    double scale; // scale of noise
 };
 
 #endif //!TEXTURE_H_
