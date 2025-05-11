@@ -18,6 +18,7 @@ class Camera {
     Point3 lookfrom = Point3(0, 0, 0);  // location of the camera
     Point3 lookat = Point3(0, 0, -1);   // location of the point that the camera is looking at
     Vector3 vup = Vector3(0, 1, 0);     // direction of up for the camera
+    Color background;                   // Scene backgound color
 
     double defocus_angle = 0;           // angle of defocus
     double focus_dist = 10;             // distance of focus from camera
@@ -165,24 +166,26 @@ class Camera {
       if (world.hit(r, Interval(0.001, infinity), rec)) {
         Ray scattered;
         Color attenuation;
+        Color color_from_emission = rec.mat->emitted(rec.u, rec.v, rec.p);
 
         // Calculate the scattered ray based on the material of the entity that has been hit by the ray
         if (rec.mat->scatter(r, rec, attenuation, scattered)) {
           // Recursive call the scattered ray
-          return attenuation * ray_color(scattered, depth-1, world);
+          Color color_from_scatter = attenuation * ray_color(scattered, depth-1, world);
+          return color_from_scatter + color_from_emission;
         }
 
-        // If ray is not scattered, return black color
-        return Color(0, 0, 0);
+        // If ray is not scattered, return emission color
+        return color_from_emission;
       }
 
       // If nothing is hit, calculate the gradient value for the background
-      Vector3 unit_direction = unit_vector(r.direction());
-      const double a = 0.5 * (unit_direction.y() + 1.0);
+      // Vector3 unit_direction = unit_vector(r.direction());
+      // const double a = 0.5 * (unit_direction.y() + 1.0);
+      // return gradient(COLOR_DARK_BLUE, COLOR_BLUE, a);
 
-      // Return the gradient color
-      return gradient(COLOR_DARK_BLUE, COLOR_BLUE, a);
-
+      // Return the background color
+      return background;
     }
 };
 
