@@ -13,8 +13,14 @@
 #include "camera.h"
 #include "texture.h"
 #include "material.h"
+#include "sphere.h"
+#include "quad.h"
 
 using json = nlohmann::json;
+
+using TextureMap = std::unordered_map<std::string, shared_ptr<Texture>>;
+using MaterialMap = std::unordered_map<std::string, shared_ptr<Material>>;
+using EntityMap = std::unordered_map<std::string, shared_ptr<Entity>>;
 
 class Parser {
   public:
@@ -48,7 +54,7 @@ class Parser {
       camera.defocus_angle = parse_float(section, "defocus_angle", "camera.defocus_angle");
     }
 
-    void parse_textures(std::unordered_map<std::string, shared_ptr<Texture>>& texture_map) {
+    void parse_textures(TextureMap& texture_map) {
       const json& section = target_json["textures"];
 
       if (section.type() != json::value_t::object) {
@@ -102,8 +108,7 @@ class Parser {
       }
     }
 
-    void parse_materials(std::unordered_map<std::string, shared_ptr<Material>>& materials_map,
-        std::unordered_map<std::string, shared_ptr<Texture>>& texture_map) {
+    void parse_materials(MaterialMap& materials_map, TextureMap& texture_map) {
       const json& section = target_json["materials"];
 
       if (section.type() != json::value_t::object) {
@@ -114,8 +119,8 @@ class Parser {
         const std::string type = parse_string(value, "type", "materials." + key + ".type");
 
         if (type == "Lambertian") {
-          if (value.contains("color")) {
-            Color color = parse_color(value, "color", "materials." + key + ".albedo");
+          if (value.contains("albedo")) {
+            Color color = parse_color(value, "albedo", "materials." + key + ".albedo");
             materials_map[key] = make_shared<Lambertian>(color);
           }
           else if (value.contains("texture")) {
@@ -140,7 +145,7 @@ class Parser {
         }
         else if (type == "DiffuseLight") {
           if (value.contains("color")) {
-            Color color = parse_color(value, "color", "materials." + key + ".albedo");
+            Color color = parse_color(value, "color", "materials." + key + ".color");
             materials_map[key] = make_shared<DiffuseLight>(color);
           }
           else if (value.contains("texture")) {
@@ -153,6 +158,38 @@ class Parser {
           else {
             throw std::runtime_error(target_file_path + ":materials." + key + " Expected either color or texture");
           }
+        }
+      }
+    }
+
+    void parse_entities(EntityMap& entity_map, MaterialMap& material_map) {
+      const json& section = target_json["entities"];
+
+      if (section.type() != json::value_t::object) {
+        throw std::runtime_error(target_file_path + ":entities Expected to be an object");
+      }
+
+      for (const auto& [key, value]: section.items()) {
+        const std::string type = parse_string(value, "type", "entities." + key + ".type");
+        const std::string material_name = parse_string(value, "material", "entities." + key + ".material");
+
+        if (material_map.find(material_name) ==material_map.end()) {
+          throw std::runtime_error(target_file_path + ":materials." + key + ".material Could not find a material with name " + material_name);
+        }
+
+        if (type == "Sphere") {
+          Vector3 position = parse_vector3(value, "position", "entities." + key + ".position");
+          double radius = parse_float(value, "radius", "entities." + key + ".radius");
+          if (radius < 0) {
+            throw std::runtime_error(target_file_path + ":entities." + key + " Expected radius to be positive");
+          }
+          entity_map[key] = make_shared<Sphere>(position, radius, material_map[material_name]);
+        }
+        else if (type == "Quad") {
+          Vector3 center = parse_vector3(value, "center", "entities." + key + ".center");
+          Vector3 horizontal = parse_vector3(value, "horizontal", "entitites." + key + ".horizontal");
+          Vector3 vertical = parse_vector3(value, "vertical", "entitites." + key + ".vertical");
+          entity_map[key] = make_shared<Quad>(center, horizontal, vertical, material_map[material_name]);
         }
       }
     }
@@ -200,10 +237,6 @@ class Parser {
         if (color_json[i].type() != json::value_t::number_float &&
             color_json[i].type() != json::value_t::number_unsigned) {
           throw std::runtime_error(target_file_path + ":" + path + " Expected to be a float");
-        }
-
-        if (color_json[i] < 0 || color_json[i] > 1) {
-          throw std::runtime_error(target_file_path + ":" + path + " Expected to be between 0.0 and 1.0");
         }
 
         color[i] = color_json[i];
