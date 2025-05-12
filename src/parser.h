@@ -3,11 +3,15 @@
 
 #include <string>
 #include <fstream>
+#include <string>
+#include <unordered_map>
+#include <queue>
 
 #include "external/json.hpp"
 #include "vector3.h"
 #include "color.h"
 #include "camera.h"
+#include "texture.h"
 
 using json = nlohmann::json;
 
@@ -30,6 +34,7 @@ class Parser {
       }
 
       const json& section = target_json["camera"];
+
       camera.aspect_ratio = parse_float(section, "aspect_ratio", "camera.aspect_ratio");
       camera.image_width = parse_number_unsigned(section, "image_width", "camera.image_width");
       camera.samples_per_pixel = parse_number_unsigned(section, "samples_per_pixel", "camera.samples_per_pixel");
@@ -40,6 +45,60 @@ class Parser {
       camera.lookat = parse_vector3(section, "lookat", "camera.lookat");
       camera.vup = parse_vector3(section, "vup", "camera.vup");
       camera.defocus_angle = parse_float(section, "defocus_angle", "camera.defocus_angle");
+    }
+
+    void parse_textures(std::unordered_map<std::string, shared_ptr<Texture>>& texture_map) {
+      const json& section = target_json["textures"];
+
+      if (section.type() != json::value_t::object) {
+        throw std::runtime_error(target_file_path + ":section Expected to be an object");
+      }
+
+      std::queue<std::string> checker_queue;
+
+      for (const auto& [key, value]: section.items()) {
+        const std::string type = parse_string(value, "type", "textures." + key + ".type");
+
+        if (type == "SolidColor") {
+          Color albedo = parse_color(value, "albedo", "textures." + key + ".albedo");
+          texture_map[key] = make_shared<SolidColor>(albedo);
+        }
+        else if (type == "ImageTexture") {
+          const std::string source = parse_string(value, "source", "textures." + key + ".source");
+          texture_map[key] = make_shared<ImageTexture>(source.c_str());
+        }
+        else if (type == "NoiseTexture") {
+          double scale = parse_float(value, "scale", "textures." + key + ".scale");
+          texture_map[key] = make_shared<NoiseTexture>(scale);
+        }
+        else if (type == "CheckerTexture") {
+          checker_queue.push(key);
+        }
+        else {
+          throw std::runtime_error(target_file_path + ":textures." + key + ".type Invalid type name");
+        }
+      }
+
+      while (checker_queue.size()) {
+        const std::string key = checker_queue.front();
+        checker_queue.pop();
+        auto value = section[key];
+
+        const std::string odd = parse_string(value, "odd", "textures." + key + ".odd");
+
+        if (texture_map.find(odd) == texture_map.end()) {
+          throw std::runtime_error(target_file_path + ":textures." + key + ".odd Could not find texture named " + odd);
+        }
+
+        const std::string even = parse_string(value, "even", "textures." + key + ".even");
+
+        if (texture_map.find(even) == texture_map.end()) {
+          throw std::runtime_error(target_file_path + ":textures." + key + ".even Could not find texture named " + even);
+        }
+
+        double scale = parse_float(value, "scale", "textures." + key + ".scale");
+        texture_map[key] = make_shared<CheckerTexture>(scale, texture_map[even], texture_map[odd]);
+      }
     }
 
   private:
@@ -95,6 +154,18 @@ class Parser {
       }
 
       return color;
+    }
+
+    std::string parse_string(const json& section, const std::string& value, const std::string& path) {
+      if (!section.contains(value)) {
+        throw std::runtime_error(target_file_path + ":" + path + " Path not found");
+      }
+
+      if (section[value].type() != json::value_t::string) {
+        throw std::runtime_error(target_file_path + ":" + path + " Expected to be string");
+      }
+
+      return section[value];
     }
 
     double parse_float(const json& section, const std::string& value, const std::string& path) {
