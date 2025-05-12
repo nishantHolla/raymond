@@ -22,12 +22,20 @@ using TextureMap = std::unordered_map<std::string, shared_ptr<Texture>>;
 using MaterialMap = std::unordered_map<std::string, shared_ptr<Material>>;
 using EntityMap = std::unordered_map<std::string, shared_ptr<Entity>>;
 
+// ==============================
+// Parser class
+// ==============================
+
 class Parser {
   public:
+    /*
+     * Construct the parser with the target json file path
+     */
     Parser(const std::string& target_file_path) :
       target_file_path(target_file_path) {
         std::ifstream target_input_stream(target_file_path);
 
+        // failed to open the file
         if (!target_input_stream.good()) {
           throw std::runtime_error(target_file_path + ": File not found");
         }
@@ -35,6 +43,9 @@ class Parser {
         target_json = json::parse(target_input_stream);
     };
 
+    /*
+     * Parse the camera settings from the json file into the provided camera object
+     */
     void parse_camera(Camera& camera) {
       if (!target_json.contains("camera")) {
         throw std::runtime_error(target_file_path + ":camera Path not found");
@@ -54,6 +65,10 @@ class Parser {
       camera.defocus_angle = parse_float(section, "defocus_angle", "camera.defocus_angle");
     }
 
+    /*
+     * Parse the textures from the json file into the provided textures map
+     * Stores the shared pointers to textures along with their identifiers
+     */
     void parse_textures(TextureMap& texture_map) {
       const json& section = target_json["textures"];
 
@@ -108,6 +123,10 @@ class Parser {
       }
     }
 
+    /*
+     * Parse the materials from the json file into the provided materials map
+     * Stores the shared pointers to materials along with their identifiers
+     */
     void parse_materials(MaterialMap& materials_map, TextureMap& texture_map) {
       const json& section = target_json["materials"];
 
@@ -162,6 +181,10 @@ class Parser {
       }
     }
 
+    /*
+     * Parse the entities from the json file into the provided entities map
+     * Stores the shared pointers to entities along with their identifiers
+     */
     void parse_entities(EntityMap& entity_map, MaterialMap& material_map) {
       const json& section = target_json["entities"];
 
@@ -195,9 +218,13 @@ class Parser {
     }
 
   private:
-    const std::string target_file_path;
-    json target_json;
+    const std::string target_file_path;  // path to the target json file
+    json target_json;                    // parsed json object
 
+    /*
+     * Parse a 3 element array of given value as a Vector3 object from the given json section
+     * Throws relavent errors with the given path to the value
+     */
     Vector3 parse_vector3(const json& section, const std::string& value, const std::string& path) {
       if (!section.contains(value)) {
         throw std::runtime_error(target_file_path + ":" + path + " Path not found");
@@ -222,6 +249,10 @@ class Parser {
       return vector;
     }
 
+    /*
+     * Parse a 3 element array of given value as a Color object from the given json section
+     * Throws relavent errors with the given path to the value
+     */
     Color parse_color(const json& section, const std::string& value, const std::string& path) {
       if (!section.contains(value)) {
         throw std::runtime_error(target_file_path + ":" + path + " Path not found");
@@ -245,6 +276,10 @@ class Parser {
       return color;
     }
 
+    /*
+     * Parse a string of given value from the given json section
+     * Throws relavent errors with the given path to the value
+     */
     std::string parse_string(const json& section, const std::string& value, const std::string& path) {
       if (!section.contains(value)) {
         throw std::runtime_error(target_file_path + ":" + path + " Path not found");
@@ -257,6 +292,10 @@ class Parser {
       return section[value];
     }
 
+    /*
+     * Parse a decimal number of given value from the given json section
+     * Throws relavent errors with the given path to the value
+     */
     double parse_float(const json& section, const std::string& value, const std::string& path) {
       if (!section.contains(value)) {
         throw std::runtime_error(target_file_path + ":" + path + " Path not found");
@@ -271,6 +310,10 @@ class Parser {
       return section[value];
     }
 
+    /*
+     * Parse a positive integer of given value from the given json section
+     * Throws relavent errors with the given path to the value
+     */
     int parse_number_unsigned(const json& section, const std::string& value, const std::string& path) {
       if (!section.contains(value)) {
         throw std::runtime_error(target_file_path + ":" + path + " Path not found");

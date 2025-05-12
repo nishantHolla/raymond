@@ -17,8 +17,15 @@ using TextureMap = std::unordered_map<std::string, shared_ptr<Texture>>;
 using MaterialMap = std::unordered_map<std::string, shared_ptr<Material>>;
 using EntityMap = std::unordered_map<std::string, shared_ptr<Entity>>;
 
+// ==============================
+// Scene class
+// ==============================
+
 class Scene {
   public:
+    /*
+     * Construct the scene object with the path to the scene file
+     */
     Scene(const std::string& scene_file_path) :
       parser(scene_file_path) {
 
@@ -41,17 +48,20 @@ class Scene {
         world = EntityList(make_shared<BVH_Node>(world));
     }
 
+    /*
+     * Render the scene to an output image file
+     */
     void render(const std::string& output_file_path) {
       camera.render(world, output_file_path);
     }
 
   private:
-    Parser parser;
-    Camera camera;
-    EntityList world;
-    TextureMap texture_map;
-    MaterialMap material_map;
-    EntityMap entity_map;
+    Parser parser;               // parser to parse the scene json file
+    Camera camera;               // scene's camera
+    EntityList world;            // scene's world
+    TextureMap texture_map;      // scene's textures
+    MaterialMap material_map;    // scene's materials
+    EntityMap entity_map;        // scene's entities
 };
 
 #endif //!SCENE_H_
