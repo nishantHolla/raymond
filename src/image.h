@@ -9,7 +9,7 @@
 #include <iostream>
 
 // ==============================
-// Vector3 class
+// Image class
 // ==============================
 
 class Image {

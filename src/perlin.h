@@ -1,6 +1,8 @@
 #ifndef PERLIN_H_
 #define PERLIN_H_
 
+#include "vector3.h"
+
 class Perlin {
   public:
     Perlin() {

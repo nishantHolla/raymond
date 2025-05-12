@@ -1,6 +1,9 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
+#include "vector3.h"
+#include "ray.h"
+#include "interval.h"
 #include "aabb.h"
 
 class Material;

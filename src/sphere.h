@@ -1,6 +1,9 @@
 #ifndef SPHERE_H_
 #define SPHERE_H_
 
+#include "vector3.h"
+#include "ray.h"
+#include "interval.h"
 #include "entity.h"
 
 // ==============================

@@ -1,6 +1,8 @@
 #ifndef ENTITY_LIST_H_
 #define ENTITY_LIST_H_
 
+#include "ray.h"
+#include "interval.h"
 #include "aabb.h"
 #include "entity.h"
 

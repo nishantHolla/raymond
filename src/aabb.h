@@ -1,6 +1,10 @@
 #ifndef AABB_H_
 #define AABB_H_
 
+#include "vector3.h"
+#include "ray.h"
+#include "interval.h"
+
 // ==============================
 // Aabb class
 // ==============================

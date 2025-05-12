@@ -1,6 +1,10 @@
 #ifndef CAMERA_H_
 #define CAMERA_H_
 
+#include "vector3.h"
+#include "color.h"
+#include "ray.h"
+#include "interval.h"
 #include "entity.h"
 #include "material.h"
 

@@ -1,6 +1,9 @@
 #ifndef TEXTURE_H_
 #define TEXTURE_H_
 
+#include "vector3.h"
+#include "color.h"
+#include "interval.h"
 #include "image.h"
 #include "perlin.h"
 

@@ -1,6 +1,9 @@
 #ifndef QUAD_H_
 #define QUAD_H_
 
+#include "vector3.h"
+#include "ray.h"
+#include "interval.h"
 #include "entity.h"
 
 // ==============================

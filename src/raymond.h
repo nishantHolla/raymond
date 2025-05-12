@@ -80,25 +80,4 @@ void display_progress(int current, int total) {
     << std::flush;
 }
 
-// ==============================
-// Headers
-// ==============================
-
-#include "interval.h"
-#include "color.h"
-#include "ray.h"
-#include "vector3.h"
-
-// ==============================
-// Colors
-// ==============================
-
-const Color COLOR_PURE_RED = Color(1.0, 0.0, 0.0);
-const Color COLOR_PURE_GREEN = Color(0.0, 1.0, 0.0);
-const Color COLOR_PURE_BLUE = Color(0.0, 0.0, 1.0);
-const Color COLOR_BLUE = Color(0.5, 0.7, 1.0);
-const Color COLOR_DARK_BLUE = Color(0.03, 0.03, 0.1);
-const Color COLOR_WHITE = Color(1.0, 1.0, 1.0);
-const Color COLOR_BLACK = Color(0.0, 0.0, 0.0);
-
 #endif //!RAYMOND_H_

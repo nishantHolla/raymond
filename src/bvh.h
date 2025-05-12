@@ -1,6 +1,8 @@
 #ifndef BVH_H_
 #define BVH_H_
 
+#include "ray.h"
+#include "interval.h"
 #include "aabb.h"
 #include "entity.h"
 #include "entity_list.h"
