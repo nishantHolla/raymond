@@ -1,7 +1,6 @@
 #include <fstream>
 
 #include "raymond.h"
-/*#include "material.h"*/
 /*#include "sphere.h"*/
 /*#include "quad.h"*/
 /*#include "bvh.h"*/
@@ -26,7 +25,6 @@ int main(int argc, char * argv[]) {
   // Setup world
 
   /*EntityList world;*/
-
 
   /*shared_ptr<Texture> noise_tex = make_shared<NoiseTexture>(4);*/
   /*world.add(make_shared<Sphere>(Point3(0, -1000, 0), 1000, make_shared<Lambertian>(noise_tex)));*/

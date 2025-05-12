@@ -200,7 +200,7 @@ class Dielectric : public Material {
 };
 
 // ==============================
-// Emissive class
+// DiffuseLight class
 // (derived from Material class)
 // ==============================
 

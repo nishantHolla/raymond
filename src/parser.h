@@ -12,6 +12,7 @@
 #include "color.h"
 #include "camera.h"
 #include "texture.h"
+#include "material.h"
 
 using json = nlohmann::json;
 
@@ -51,7 +52,7 @@ class Parser {
       const json& section = target_json["textures"];
 
       if (section.type() != json::value_t::object) {
-        throw std::runtime_error(target_file_path + ":section Expected to be an object");
+        throw std::runtime_error(target_file_path + ":textures Expected to be an object");
       }
 
       std::queue<std::string> checker_queue;
@@ -98,6 +99,61 @@ class Parser {
 
         double scale = parse_float(value, "scale", "textures." + key + ".scale");
         texture_map[key] = make_shared<CheckerTexture>(scale, texture_map[even], texture_map[odd]);
+      }
+    }
+
+    void parse_materials(std::unordered_map<std::string, shared_ptr<Material>>& materials_map,
+        std::unordered_map<std::string, shared_ptr<Texture>>& texture_map) {
+      const json& section = target_json["materials"];
+
+      if (section.type() != json::value_t::object) {
+        throw std::runtime_error(target_file_path + ":materials Expected to be an object");
+      }
+
+      for (const auto& [key, value]: section.items()) {
+        const std::string type = parse_string(value, "type", "materials." + key + ".type");
+
+        if (type == "Lambertian") {
+          if (value.contains("color")) {
+            Color color = parse_color(value, "color", "materials." + key + ".albedo");
+            materials_map[key] = make_shared<Lambertian>(color);
+          }
+          else if (value.contains("texture")) {
+            const std::string texture_name = parse_string(value, "texture", "materials." + key + ".texture");
+            if (texture_map.find(texture_name) == texture_map.end()) {
+              throw std::runtime_error(target_file_path + ":materials." + key + ".texture Could not find a texture with name " + texture_name );
+            }
+            materials_map[key] = make_shared<Lambertian>(texture_map[texture_name]);
+          }
+          else {
+            throw std::runtime_error(target_file_path + ":materials." + key + " Expected either color or texture");
+          }
+        }
+        else if (type == "Metal") {
+          Color albedo = parse_color(value, "albedo", "materials." + key + ".albedo");
+          double fuzz = parse_float(value, "fuzz", "materials." + key + ".fuzz");
+          materials_map[key] = make_shared<Metal>(albedo, fuzz);
+        }
+        else if (type == "Dielectric") {
+          double refraction_index = parse_float(value, "refraction_index", "materials." + key + ".refraction_index");
+          materials_map[key] = make_shared<Dielectric>(refraction_index);
+        }
+        else if (type == "DiffuseLight") {
+          if (value.contains("color")) {
+            Color color = parse_color(value, "color", "materials." + key + ".albedo");
+            materials_map[key] = make_shared<DiffuseLight>(color);
+          }
+          else if (value.contains("texture")) {
+            const std::string texture_name = parse_string(value, "texture", "materials." + key + ".texture");
+            if (texture_map.find(texture_name) == texture_map.end()) {
+              throw std::runtime_error(target_file_path + ":materials." + key + ".texture Could not find a texture with name " + texture_name );
+            }
+            materials_map[key] = make_shared<DiffuseLight>(texture_map[texture_name]);
+          }
+          else {
+            throw std::runtime_error(target_file_path + ":materials." + key + " Expected either color or texture");
+          }
+        }
       }
     }
 
