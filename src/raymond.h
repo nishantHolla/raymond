@@ -80,4 +80,6 @@ void display_progress(int current, int total) {
     << std::flush;
 }
 
+#include "scene.h"
+
 #endif //!RAYMOND_H_
