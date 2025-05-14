@@ -100,12 +100,26 @@ class Quad : public Entity {
 };
 
 
-inline shared_ptr<EntityList> box(const Point3& center, double length, double width, double height, shared_ptr<Material> mat) {
+inline shared_ptr<EntityList> box(const Point3& center,
+    const Vector3& dimensions, const Vector3& rotations, shared_ptr<Material> mat) {
+
+  double length = dimensions[0];
+  double width = dimensions[1];
+  double height = dimensions[2];
+
+  double rotation_x = rotations[0];
+  double rotation_y = rotations[1];
+  double rotation_z = rotations[2];
+
   shared_ptr<EntityList> sides = make_shared<EntityList>();
 
   Vector3 width_vec = Vector3(width, 0, 0);
   Vector3 height_vec = Vector3(0, height, 0);
   Vector3 length_vec = Vector3(0, 0, length);
+
+  width_vec = width_vec.rotate(rotation_x, 0).rotate(rotation_y, 1).rotate(rotation_z, 2);
+  height_vec = height_vec.rotate(rotation_x, 0).rotate(rotation_y, 1).rotate(rotation_z, 2);
+  length_vec = length_vec.rotate(rotation_x, 0).rotate(rotation_y, 1).rotate(rotation_z, 2);
 
   sides->add(make_shared<Quad>(center - length_vec / 2, width_vec, height_vec, mat));
   sides->add(make_shared<Quad>(center + length_vec / 2, width_vec, height_vec, mat));

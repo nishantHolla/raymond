@@ -45,6 +45,39 @@ class Vector3 {
     }
 
     /*
+     * Rotate the vector by given angle in radians
+     */
+    Vector3 rotate(double angle, int axis) const {
+      double cos = std::cos(angle);
+      double sin = std::sin(angle);
+
+      if (axis == 0) {
+        return Vector3(
+            e[0],
+            e[1] * cos - e[2] * sin,
+            e[1] * sin + e[2] * cos
+            );
+      }
+      else if (axis == 1) {
+        return Vector3(
+            e[0] * cos + e[2] * sin,
+            e[1],
+            e[2] * cos - e[0] * sin
+            );
+      }
+      else if (axis == 2) {
+        return Vector3(
+            e[0] * cos - e[1] * sin,
+            e[0] * sin + e[1] * cos,
+            e[2]
+            );
+      }
+      else {
+        return *this;
+      }
+    }
+
+    /*
      * Operator overload of - to return a new vector that is the opposite of the current vector.
      */
     Vector3 operator-() const {
