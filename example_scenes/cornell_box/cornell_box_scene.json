@@ -1,0 +1,147 @@
+{
+  "camera": {
+    "aspect_ratio": 1,
+    "image_width": 1200,
+    "samples_per_pixel": 1000,
+    "max_depth": 50,
+    "background": [0, 0, 0],
+    "vfov": 40,
+    "lookfrom": [0, 0, 700],
+    "lookat": [0, 0, 0],
+    "vup": [0, 1, 0],
+    "defocus_angle": 0
+  },
+
+  "materials": {
+    "red": {
+      "type": "Lambertian",
+      "albedo": [0.65, 0.05, 0.05]
+    },
+
+    "white": {
+      "type": "Lambertian",
+      "albedo": [0.73, 0.73, 0.73]
+    },
+
+    "green": {
+      "type": "Lambertian",
+      "albedo": [0.12, 0.45, 0.15]
+    },
+
+    "light": {
+      "type": "DiffuseLight",
+      "color": [15, 15, 15]
+    },
+
+    "metal": {
+      "type": "Metal",
+      "albedo": [0.05, 0.05, 0.65],
+      "fuzz": 0
+    },
+
+    "glass": {
+      "type": "Dielectric",
+      "refractive_index": 0.4
+    },
+
+    "solid": {
+      "type": "Lambertian",
+      "albedo": [0.65, 0.65, 0.05]
+    }
+  },
+
+  "entities": {
+    "left_wall": {
+      "type": "Quad",
+      "center": [-200, 0, 0],
+      "horizontal": [0, 0, 400],
+      "vertical": [0, 400, 0],
+      "material": "green"
+    },
+
+    "right_wall": {
+      "type": "Quad",
+      "center": [200, 0, 0],
+      "horizontal": [0, 0, 400],
+      "vertical": [0, 400, 0],
+      "material": "red"
+    },
+
+    "front_wall": {
+      "type": "Quad",
+      "center": [0, 0, -200],
+      "horizontal": [400, 0, 0],
+      "vertical": [0, 400, 0],
+      "material": "white"
+    },
+
+    "bottom_wall": {
+      "type": "Quad",
+      "center": [0, -200, 0],
+      "horizontal": [400, 0, 0],
+      "vertical": [0, 0, 400],
+      "material": "white"
+    },
+
+    "top_wall": {
+      "type": "Quad",
+      "center": [0, 200, 0],
+      "horizontal": [400, 0, 0],
+      "vertical": [0, 0, 400],
+      "material": "white"
+    },
+
+    "light_source": {
+      "type": "Quad",
+      "center": [0, 195, 0],
+      "horizontal": [100, 0, 0],
+      "vertical": [0, 0, 100],
+      "material": "light"
+    },
+
+    "box_center": {
+      "type": "Box",
+      "center": [0, -120, 0],
+      "dimensions": [40, 40, 160],
+      "rotations": [0, 45, 0],
+      "material": "white"
+    },
+
+    "box_right": {
+      "type": "Box",
+      "center": [100, -120, 20],
+      "dimensions": [40, 40, 160],
+      "rotations": [0, 60, 0],
+      "material": "white"
+    },
+
+    "box_left": {
+      "type": "Box",
+      "center": [-100, -120, 20],
+      "dimensions": [40, 40, 160],
+      "rotations": [0, -60, 0],
+      "material": "white"
+    },
+
+    "ball_center": {
+      "type": "Sphere",
+      "center": [0, 0, 0],
+      "radius": 40,
+      "material": "metal"
+    },
+
+    "ball_right": {
+      "type": "Sphere",
+      "center": [100, 0, 20],
+      "radius": 40,
+      "material": "glass"
+    },
+
+    "ball_left": {
+      "type": "Sphere",
+      "center": [-100, 0, 20],
+      "radius": 40,
+      "material": "solid"
+    }
+  }
+}

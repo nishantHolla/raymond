@@ -2,7 +2,7 @@
   "camera": {
     "aspect_ratio": 1.77778,
     "image_width": 1200,
-    "samples_per_pixel": 100,
+    "samples_per_pixel": 1000,
     "max_depth": 50,
     "background": [0.1, 0.1, 0.3],
     "vfov": 60,
@@ -48,7 +48,7 @@
 
     "earth": {
       "type": "Sphere",
-      "position": [0, 0, 0],
+      "center": [0, 0, 0],
       "radius": 2,
       "material": "earth_material"
     },
@@ -63,7 +63,7 @@
 
     "light": {
       "type": "Sphere",
-      "position": [-150, 0, -180],
+      "center": [-150, 0, -180],
       "radius": 150,
       "material": "light_material"
     }
