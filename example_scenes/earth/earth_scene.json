@@ -1,0 +1,71 @@
+{
+  "camera": {
+    "aspect_ratio": 1.77778,
+    "image_width": 1200,
+    "samples_per_pixel": 100,
+    "max_depth": 50,
+    "background": [0.1, 0.1, 0.3],
+    "vfov": 60,
+    "lookfrom": [0, 0, -9],
+    "lookat": [0, 0, 0],
+    "vup": [0, 1, 0],
+    "defocus_angle": 0
+  },
+
+  "textures": {
+
+    "earth_texture": {
+      "type": "ImageTexture",
+      "source": "./earthmap.jpg"
+    },
+
+    "space_texture": {
+      "type": "ImageTexture",
+      "source": "./space.jpg"
+    }
+
+  },
+
+  "materials": {
+
+    "earth_material": {
+      "type": "Lambertian",
+      "texture": "earth_texture"
+    },
+
+    "space_material": {
+      "type": "Lambertian",
+      "texture": "space_texture"
+    },
+
+    "light_material": {
+      "type": "DiffuseLight",
+      "color": [8, 8, 7]
+    }
+  },
+
+  "entities": {
+
+    "earth": {
+      "type": "Sphere",
+      "position": [0, 0, 0],
+      "radius": 2,
+      "material": "earth_material"
+    },
+
+    "space": {
+      "type": "Quad",
+      "center": [0, 0, 2],
+      "horizontal": [30, 0, 0],
+      "vertical": [0, 15, 0],
+      "material": "space_material"
+    },
+
+    "light": {
+      "type": "Sphere",
+      "position": [-150, 0, -180],
+      "radius": 150,
+      "material": "light_material"
+    }
+  }
+}
