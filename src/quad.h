@@ -5,6 +5,7 @@
 #include "ray.h"
 #include "interval.h"
 #include "entity.h"
+#include "entity_list.h"
 
 // ==============================
 // Quad class
@@ -97,5 +98,23 @@ class Quad : public Entity {
     shared_ptr<Material> mat;  // material of the quad
     Aabb bound_box;            // bounding box of the quad
 };
+
+
+inline shared_ptr<EntityList> box(const Point3& center, double length, double width, double height, shared_ptr<Material> mat) {
+  shared_ptr<EntityList> sides = make_shared<EntityList>();
+
+  Vector3 width_vec = Vector3(width, 0, 0);
+  Vector3 height_vec = Vector3(0, height, 0);
+  Vector3 length_vec = Vector3(0, 0, length);
+
+  sides->add(make_shared<Quad>(center - length_vec / 2, width_vec, height_vec, mat));
+  sides->add(make_shared<Quad>(center + length_vec / 2, width_vec, height_vec, mat));
+  sides->add(make_shared<Quad>(center - width_vec / 2, length_vec, height_vec, mat));
+  sides->add(make_shared<Quad>(center + width_vec / 2, length_vec, height_vec, mat));
+  sides->add(make_shared<Quad>(center - height_vec / 2, width_vec, length_vec, mat));
+  sides->add(make_shared<Quad>(center + height_vec / 2, width_vec, length_vec, mat));
+
+  return sides;
+}
 
 #endif //!QUAD_H_

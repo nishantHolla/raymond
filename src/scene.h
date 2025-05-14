@@ -44,15 +44,21 @@ class Scene {
         for (const auto& [_, value] : entity_map) {
           world.add(value);
         }
-
-        world = EntityList(make_shared<BVH_Node>(world));
     }
 
     /*
      * Render the scene to an output image file
      */
     void render(const std::string& output_file_path) {
+      world = EntityList(make_shared<BVH_Node>(world));
       camera.render(world, output_file_path);
+    }
+
+    /*
+     * Return the world of the scene
+     */
+    EntityList& get_world() {
+      return world;
     }
 
   private:

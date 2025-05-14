@@ -70,6 +70,10 @@ class Parser {
      * Stores the shared pointers to textures along with their identifiers
      */
     void parse_textures(TextureMap& texture_map) {
+      if (!target_json.contains("textures")) {
+        return;
+      }
+
       const json& section = target_json["textures"];
 
       if (section.type() != json::value_t::object) {
@@ -128,6 +132,10 @@ class Parser {
      * Stores the shared pointers to materials along with their identifiers
      */
     void parse_materials(MaterialMap& materials_map, TextureMap& texture_map) {
+      if (!target_json.contains("materials")) {
+        return;
+      }
+
       const json& section = target_json["materials"];
 
       if (section.type() != json::value_t::object) {
@@ -186,6 +194,10 @@ class Parser {
      * Stores the shared pointers to entities along with their identifiers
      */
     void parse_entities(EntityMap& entity_map, MaterialMap& material_map) {
+      if (!target_json.contains("entities")) {
+        return;
+      }
+
       const json& section = target_json["entities"];
 
       if (section.type() != json::value_t::object) {
@@ -210,9 +222,25 @@ class Parser {
         }
         else if (type == "Quad") {
           Vector3 center = parse_vector3(value, "center", "entities." + key + ".center");
-          Vector3 horizontal = parse_vector3(value, "horizontal", "entitites." + key + ".horizontal");
-          Vector3 vertical = parse_vector3(value, "vertical", "entitites." + key + ".vertical");
+          Vector3 horizontal = parse_vector3(value, "horizontal", "entities." + key + ".horizontal");
+          Vector3 vertical = parse_vector3(value, "vertical", "entities." + key + ".vertical");
           entity_map[key] = make_shared<Quad>(center, horizontal, vertical, material_map[material_name]);
+        }
+        else if (type == "Box") {
+          Vector3 center = parse_vector3(value, "center", "entities." + key + ".center");
+          double length = parse_float(value, "length", "entities." + key + ".length");
+          if (length < 0) {
+            throw std::runtime_error(target_file_path + ":entities." + key + "length Can not be negative");
+          }
+          double width = parse_float(value, "width", "entities." + key + ".width");
+          if (width < 0) {
+            throw std::runtime_error(target_file_path + ":entities." + key + "width Can not be negative");
+          }
+          double height = parse_float(value, "height", "entities." + key + ".height");
+          if (height < 0) {
+            throw std::runtime_error(target_file_path + ":entities." + key + "height Can not be negative");
+          }
+          entity_map[key] = box(center, length, width, height, material_map[material_name]);
         }
       }
     }
