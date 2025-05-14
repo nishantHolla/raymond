@@ -29,7 +29,7 @@ class ImageBuffer {
       return buffer[row * width + col];
     }
 
-    void write_to_file(const std::string& file_path) {
+    void write_to_file(const std::string& file_path, const std::string& extension) {
       unsigned char* image = new unsigned char[width * height * 3];
 
       for (int row = 0; row < height; row++) {
@@ -42,7 +42,13 @@ class ImageBuffer {
         }
       }
 
-      stbi_write_jpg(file_path.c_str(), width, height, 3, image, 100);
+      if (extension == ".jpg" || extension == ".jpeg") {
+        stbi_write_jpg(file_path.c_str(), width, height, 3, image, 100);
+      }
+      else if (extension == ".png") {
+        stbi_write_png(file_path.c_str(), width, height, 3, image, width * 3);
+      }
+
       delete[] image;
     }
 

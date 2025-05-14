@@ -35,7 +35,7 @@ class Camera {
      * Renders the given list of entities to a P3 file at given file path
      */
     void render(const Entity& world, const std::string& file_path) {
-      bool is_ppm = file_path.substr(file_path.size() - 4, 4) == ".ppm";
+      const std::string extension = file_path.substr(file_path.size() - 4, 4);
 
       // Initialize private camera attributes based on values of public camera attributes
       initialize();
@@ -75,7 +75,7 @@ class Camera {
       double end = omp_get_wtime();
       std::clog << "\r[INFO]: Render completed in " << (end - start) << " seconds.\n";
 
-      if (is_ppm) {
+      if (extension == ".ppm") {
         // Open the output file
         std::ofstream image_file(file_path);
         if (!image_file) {
@@ -97,7 +97,7 @@ class Camera {
         image_file.close();
       }
       else {
-        image_buffer.write_to_file(file_path);
+        image_buffer.write_to_file(file_path, extension);
       }
     }
 
