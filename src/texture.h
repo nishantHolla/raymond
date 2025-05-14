@@ -43,6 +43,8 @@ class SolidColor : public Texture {
      * Returns the single solid color of the texture for any point on the entity.
      */
     Color value(double u, double v, const Point3& p) const override {
+      (void) u, (void) v, (void) p;
+
       return albedo;
     }
 
@@ -112,6 +114,8 @@ class ImageTexture : public Texture {
      * Maps the 3d entity to a 2d surface and returns the color on the image for a given 3d point
      */
     Color value(double u, double v, const Point3& p) const override {
+      (void) p;
+
       if (image.height() <= 0) {
         return Color(0, 1, 1);
       }
@@ -149,6 +153,7 @@ class NoiseTexture : public Texture {
      * Maps the 3d entity to a 2d surface and returns the color of the noise for a given 3d point
      */
     Color value(double u, double v, const Point3& p) const override {
+      (void) u, (void) v;
       return Color(.5, .5, .5) * (1 + std::sin(scale * p.z() + 10 * noise.turb(p, 7)));
     }
 

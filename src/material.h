@@ -23,6 +23,7 @@ class Material {
     virtual bool scatter(
         const Ray& r_in, const HitRecord& record, Color& Attenuation, Ray& scattered
         ) const {
+      (void) r_in, (void) record, (void) Attenuation, (void) scattered;
       return false;
     }
 
@@ -30,6 +31,7 @@ class Material {
      * Emit no color by default
      */
     virtual Color emitted(double u, double v, const Point3& p) const {
+      (void) u, (void) v, (void) p;
       return Color(0, 0, 0);
     }
 };
