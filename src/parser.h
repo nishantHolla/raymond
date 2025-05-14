@@ -167,7 +167,7 @@ class Parser {
           materials_map[key] = make_shared<Metal>(albedo, fuzz);
         }
         else if (type == "Dielectric") {
-          double refraction_index = parse_float(value, "refraction_index", "materials." + key + ".refraction_index");
+          double refraction_index = parse_float(value, "refractive_index", "materials." + key + ".refractive_index");
           materials_map[key] = make_shared<Dielectric>(refraction_index);
         }
         else if (type == "DiffuseLight") {
@@ -213,7 +213,7 @@ class Parser {
         }
 
         if (type == "Sphere") {
-          Vector3 position = parse_vector3(value, "position", "entities." + key + ".position");
+          Vector3 position = parse_vector3(value, "center", "entities." + key + ".center");
           double radius = parse_float(value, "radius", "entities." + key + ".radius");
           if (radius < 0) {
             throw std::runtime_error(target_file_path + ":entities." + key + " Expected radius to be positive");
@@ -228,19 +228,18 @@ class Parser {
         }
         else if (type == "Box") {
           Vector3 center = parse_vector3(value, "center", "entities." + key + ".center");
-          double length = parse_float(value, "length", "entities." + key + ".length");
-          if (length < 0) {
-            throw std::runtime_error(target_file_path + ":entities." + key + "length Can not be negative");
+          Vector3 dimensions = parse_vector3(value, "dimensions", "entities." + key + ".dimensions");
+          Vector3 rotations = parse_vector3(value, "rotations", "entities." + key + ".rotations");
+          if (dimensions[0] < 0) {
+            throw std::runtime_error(target_file_path + ":entities." + key + "dimensions[0] Can not be negative");
           }
-          double width = parse_float(value, "width", "entities." + key + ".width");
-          if (width < 0) {
-            throw std::runtime_error(target_file_path + ":entities." + key + "width Can not be negative");
+          if (dimensions[1] < 0) {
+            throw std::runtime_error(target_file_path + ":entities." + key + "dimensions[1] Can not be negative");
           }
-          double height = parse_float(value, "height", "entities." + key + ".height");
-          if (height < 0) {
-            throw std::runtime_error(target_file_path + ":entities." + key + "height Can not be negative");
+          if (dimensions[2] < 0) {
+            throw std::runtime_error(target_file_path + ":entities." + key + "dimensions[2] Can not be negative");
           }
-          entity_map[key] = box(center, length, width, height, material_map[material_name]);
+          entity_map[key] = box(center, dimensions, rotations, material_map[material_name]);
         }
       }
     }

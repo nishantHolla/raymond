@@ -60,7 +60,6 @@ inline int random_int(int min, int max) {
 void display_progress(int current, int total) {
   static const int PROGRESS_SIZE = 20;
   if (current == total) {
-    std::clog << "\rDone                                                       \n";
     return;
   }
 
