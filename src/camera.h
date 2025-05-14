@@ -1,12 +1,16 @@
 #ifndef CAMERA_H_
 #define CAMERA_H_
 
+#include <omp.h>
+#include <atomic>
+
 #include "vector3.h"
 #include "color.h"
 #include "ray.h"
 #include "interval.h"
 #include "entity.h"
 #include "material.h"
+#include "image_buffer.h"
 
 // ==============================
 // Camera class
@@ -31,22 +35,20 @@ class Camera {
      * Renders the given list of entities to a P3 file at given file path
      */
     void render(const Entity& world, const std::string& file_path) {
+      bool is_ppm = file_path.substr(file_path.size() - 4, 4) == ".ppm";
+
       // Initialize private camera attributes based on values of public camera attributes
       initialize();
+      ImageBuffer image_buffer(image_width, image_height);
+      std::atomic<int> lines_done = 0;
 
-      // Open the output file
-      std::ofstream image_file(file_path);
-      if (!image_file) {
-        std::cerr << "Failed to open output image file " << file_path << "\n";
-        return;
-      }
-
-      // Write header information for P3 file
-      image_file << "P3\n" << image_width << ' ' << image_height << "\n255\n";
+      // setup openmp
+      double start = omp_get_wtime();
+      omp_set_num_threads(omp_get_max_threads());
 
       // Trace rays for each pixel
+      #pragma omp parallel for schedule(dynamic)
       for (int row = 0; row < image_height; row++) {
-        display_progress(row, image_height - 1);
 
         for (int col = 0; col < image_width; col++) {
 
@@ -56,12 +58,47 @@ class Camera {
             pixel_color += ray_color(r, max_depth, world);
           }
 
-          write_color(image_file, pixel_color * pixel_samples_scale);
+          image_buffer.get(row, col) = pixel_color * pixel_samples_scale;
+        }
+
+        int done = ++lines_done;
+        if (done % 10 == 0) {
+#pragma omp critical
+          {
+            std::cerr << "\rProgress: " << done << "/" << image_height
+              << " (" << (100 * done / image_height) << "%)" << std::flush;
+          }
         }
       }
 
-      // Close the image file
-      image_file.close();
+      // calculate render time
+      double end = omp_get_wtime();
+      std::clog << "\r[INFO]: Render completed in " << (end - start) << " seconds.\n";
+
+      if (is_ppm) {
+        // Open the output file
+        std::ofstream image_file(file_path);
+        if (!image_file) {
+          std::cerr << "Failed to open output image file " << file_path << "\n";
+          return;
+        }
+
+        // write the image file header
+        image_file << "P3\n" << image_width << ' ' << image_height << "\n255\n";
+
+        // write image pixel values
+        for (int row = 0; row < image_height; row++) {
+          for (int col = 0; col < image_width; col++) {
+            write_color(image_file, image_buffer.get(row, col));
+          }
+        }
+
+        // Close the image file
+        image_file.close();
+      }
+      else {
+        image_buffer.write_to_file(file_path);
+      }
     }
 
   private:

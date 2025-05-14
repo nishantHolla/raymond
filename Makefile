@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-Wall -Wextra -pedantic
+CFLAGS=-Wall -Wextra -pedantic -fopenmp
 DEBUG_FLAGS=-ggdb -fsanitize=address
 RELEASE_FLAGS=-O3
 OUT=-o out/raymond
