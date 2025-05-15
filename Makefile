@@ -12,13 +12,3 @@ debug:
 
 release:
 	$(CC) $(CFLAGS) $(RELEASE_FLAGS) $(OUT) $(SRC) $(LIB)
-
-runDebug: debug
-	cd out && ./raymond $(ARGS)
-
-runRelease: release
-	cd out && ./raymond $(ARGS)
-
-run: runDebug
-	vimiv ./out/image.ppm
-
