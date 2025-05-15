@@ -62,7 +62,7 @@ class Camera {
         }
 
         int done = ++lines_done;
-        if (done % 10 == 0) {
+        if (done % 1 == 0) {
 #pragma omp critical
           {
             std::cerr << "\rProgress: " << done << "/" << image_height
