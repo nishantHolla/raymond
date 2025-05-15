@@ -1,0 +1,62 @@
+{
+  "camera": {
+    "aspect_ratio": 1.5,
+    "image_width": 1200,
+    "samples_per_pixel": 8000,
+    "max_depth": 500,
+    "background": [0, 0, 0],
+    "vfov": 20,
+    "lookfrom": [26, 3, 6],
+    "lookat": [0, 2, 0],
+    "vup": [0, 1, 0],
+    "defocus_angle": 0
+  },
+
+  "textures": {
+    "noise_tex": {
+      "type": "NoiseTexture",
+      "scale": 4
+    }
+  },
+
+  "materials": {
+    "perlin_mat": {
+      "type": "Lambertian",
+      "texture": "noise_tex"
+    },
+
+    "ground_mat": {
+      "type": "Lambertian",
+      "albedo": [0.5, 0.5, 0.8]
+    },
+
+    "light_mat": {
+      "type": "DiffuseLight",
+      "color": [10, 10, 10]
+    }
+  },
+
+  "entities": {
+    "ground": {
+      "type": "Sphere",
+      "center": [0, -1000, 0],
+      "radius": 1000,
+      "material": "ground_mat"
+    },
+
+    "light_source": {
+      "type": "Sphere",
+      "center": [0, 10, 0],
+      "radius": 2,
+      "material": "light_mat"
+    },
+
+    "sphere": {
+      "type": "Sphere",
+      "center": [0, 2, 0],
+      "radius": 2,
+      "material": "perlin_mat"
+    }
+  }
+}
+
