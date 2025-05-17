@@ -10,7 +10,7 @@ int main(int argc, char * argv[]) {
   // Parse arguments
 
   if (argc != 3) {
-    std::cerr << "Usage: raymond <scene_input.json> <image_output.ppm>\n";
+    std::cerr << "Usage: raymond <scene_input.json> <image_output.{jpg/png/ppm}>\n";
     return 1;
   }
 
@@ -18,12 +18,16 @@ int main(int argc, char * argv[]) {
 
   try {
     Scene scene(argv[1]);
-    scene.render(argv[2]);
   }
   catch (const std::runtime_error& e) {
     std::cerr << "[ERROR]: " << e.what() << "\n";
     return 2;
   }
+
+  // Render scene
+
+  std::clog << "[INFO]: Preparing to render\n";
+  scene.render(argv[2]);
 
   return 0;
 }
