@@ -90,10 +90,10 @@ later to apply the textures.
   },
 }
 ```
-    - Here, `earth_texture` and `space_texture` are unique names assigned to the textures.
-    - Each texture has a `type` which can be `ImageTexture`, `SolidColor`, `NoiseTexture`, or `CheckerTexture`.
-    - Look at [./example_scenes/](./example_scenes/) to know about how to setup these textures.
-    - If you define an `ImageTexture` make sure that the path to the image is relative to the executable.
+- Here, `earth_texture` and `space_texture` are unique names assigned to the textures.
+- Each texture has a `type` which can be `ImageTexture`, `SolidColor`, `NoiseTexture`, or `CheckerTexture`.
+- Look at [./example_scenes/](./example_scenes/) to know about how to setup these textures.
+- If you define an `ImageTexture` make sure that the path to the image is relative to the executable.
 
 4. Define all the materials you will need for the scene and give them a unique name that can be used
 later to apply the materials.
@@ -117,9 +117,9 @@ later to apply the materials.
   },
 }
 ```
-    - Here, `earth_material`, `space_material`, and `light_material` are unique names assigned to the materials.
-    - Each material has a `type` which can be `Lambertian`, `Metal`, `Dielectric`, or `DiffuseLight`.
-    - Look at [./example_scenes/](./example_scenes/) to know about how to setup these materials.
+- Here, `earth_material`, `space_material`, and `light_material` are unique names assigned to the materials.
+- Each material has a `type` which can be `Lambertian`, `Metal`, `Dielectric`, or `DiffuseLight`.
+- Look at [./example_scenes/](./example_scenes/) to know about how to setup these materials.
 
 5. Define all the objects you want to place in the scene and give them a unique name.
 ```json
@@ -149,11 +149,12 @@ later to apply the materials.
   }
 }
 ```
-    - Here, `earth`, `space`, and `light` are unique names assigned to the entities (objects).
-    - Each entity has a `type` which can be `Sphere`, `Quad`, or `Box`.
-    - Each entity should be assigned a `material` that must be the name of one of the materials defined
+- Here, `earth`, `space`, and `light` are unique names assigned to the entities (objects).
+- Each entity has a `type` which can be `Sphere`, `Quad`, or `Box`.
+- Each entity should be assigned a `material` that must be the name of one of the materials defined
     in the materials section
-    - Look at [./example_scenes/](./example_scenes/) to know about how to setup these materials.
+- Look at [./example_scenes/](./example_scenes/) to know about how to setup these materials.
+
 6. You should end up with a JSON that looks like [this](./example_scenes/earth/earth_scene.json)
 7. Pass this JSON as the argument to raymond and it should render the scene as you specified.
 
