@@ -1,6 +1,9 @@
 #ifndef MATERIAL_H_
 #define MATERIAL_H_
 
+#include <cmath>
+
+#include "raymond.h"
 #include "vector3.h"
 #include "color.h"
 #include "ray.h"

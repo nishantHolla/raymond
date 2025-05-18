@@ -57,7 +57,7 @@ inline int random_int(int min, int max) {
 /*
  * Displays the progress line to stdout depending on the given current line and total number of lines.
  */
-void display_progress(int current, int total) {
+inline void display_progress(int current, int total) {
   static const int PROGRESS_SIZE = 20;
   if (current == total) {
     return;
@@ -78,7 +78,5 @@ void display_progress(int current, int total) {
     << std::setprecision(2) << double(current) / total * 100 << "%       "
     << std::flush;
 }
-
-#include "scene.h"
 
 #endif //!RAYMOND_H_

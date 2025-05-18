@@ -6,8 +6,11 @@
 #include <string>
 #include <unordered_map>
 #include <queue>
+#include <stdexcept>
 
 #include "external/json.hpp"
+#include "raymond.h"
+#include "entity.h"
 #include "vector3.h"
 #include "color.h"
 #include "camera.h"

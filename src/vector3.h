@@ -1,6 +1,12 @@
 #ifndef VECTOR3_H_
 #define VECTOR3_H_
 
+#include <cmath>
+#include <stdexcept>
+#include <iostream>
+
+#include "raymond.h"
+
 // ==============================
 // Vector3 class
 // ==============================

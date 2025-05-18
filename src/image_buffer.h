@@ -1,8 +1,8 @@
 #ifndef IMAGE_BUFFER_H_
 #define IMAGE_BUFFER_H_
 
-
 #include <string>
+
 #include "color.h"
 
 #if defined(__GNUC__) || defined(__clang__)
@@ -17,6 +17,8 @@
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic pop
 #endif
+
+#include "vector3.h"
 
 // ==============================
 // ImageBuffer class

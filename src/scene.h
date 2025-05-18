@@ -3,6 +3,9 @@
 
 #include <string>
 #include <unordered_map>
+#include <iostream>
+
+#include "raymond.h"
 #include "parser.h"
 #include "camera.h"
 #include "entity.h"

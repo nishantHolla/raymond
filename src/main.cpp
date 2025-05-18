@@ -1,10 +1,7 @@
-#include <fstream>
+#include <iostream>
+#include <stdexcept>
 
-#include "raymond.h"
-#include "texture.h"
-#include "material.h"
-#include "sphere.h"
-#include "quad.h"
+#include "scene.h"
 
 int main(int argc, char * argv[]) {
   // Parse arguments

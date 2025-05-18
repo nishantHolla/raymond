@@ -1,6 +1,10 @@
 #ifndef INTERVAL_H_
 #define INTERVAL_H_
 
+#include <cmath>
+
+#include "raymond.h"
+
 // ==============================
 // Interval class
 // ==============================
@@ -83,7 +87,7 @@ class Interval {
 
 // Initializing empty and universe interval
 
-const Interval Interval::empty = Interval(+infinity, -infinity);
-const Interval Interval::universe = Interval(-infinity, +infinity);
+inline const Interval Interval::empty = Interval(+infinity, -infinity);
+inline const Interval Interval::universe = Interval(-infinity, +infinity);
 
 #endif //!INTERVAL_H_

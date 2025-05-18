@@ -1,6 +1,10 @@
 #ifndef SPHERE_H_
 #define SPHERE_H_
 
+#include <cmath>
+
+#include "raymond.h"
+#include "aabb.h"
 #include "vector3.h"
 #include "ray.h"
 #include "interval.h"

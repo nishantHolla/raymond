@@ -1,6 +1,7 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
+#include "raymond.h"
 #include "vector3.h"
 #include "ray.h"
 #include "interval.h"

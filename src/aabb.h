@@ -1,6 +1,8 @@
 #ifndef AABB_H_
 #define AABB_H_
 
+#include <algorithm>
+
 #include "vector3.h"
 #include "ray.h"
 #include "interval.h"
@@ -134,7 +136,7 @@ class Aabb {
 };
 
 
-const Aabb Aabb::empty = Aabb(Interval::empty, Interval::empty, Interval::empty);
-const Aabb Aabb::universe = Aabb(Interval::universe, Interval::universe, Interval::universe);
+inline const Aabb Aabb::empty = Aabb(Interval::empty, Interval::empty, Interval::empty);
+inline const Aabb Aabb::universe = Aabb(Interval::universe, Interval::universe, Interval::universe);
 
 #endif // !AABB_H_

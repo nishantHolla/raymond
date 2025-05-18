@@ -1,6 +1,10 @@
 #ifndef PERLIN_H_
 #define PERLIN_H_
 
+#include <cmath>
+#include <algorithm>
+
+#include "raymond.h"
 #include "vector3.h"
 
 class Perlin {

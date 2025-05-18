@@ -1,6 +1,10 @@
 #ifndef COLOR_H_
 #define COLOR_H_
 
+#include <iostream>
+#include <stdexcept>
+#include <cmath>
+
 #include "interval.h"
 #include "vector3.h"
 
@@ -170,7 +174,7 @@ inline double linear_to_gamma(double linear_component) {
 /*
  * Convert Color whose r, g, b values are from [0, 1] to pixel values which are from [0, 255]
  */
-Vector3 color_to_pixel(const Color& color) {
+inline Vector3 color_to_pixel(const Color& color) {
   const double r = color.r();
   const double g = color.g();
   const double b = color.b();
@@ -190,7 +194,7 @@ Vector3 color_to_pixel(const Color& color) {
 /*
  * Writes the components of given color to the given output stream after converting to gamma space.
  */
-void write_color(std::ostream& out, const Color& color) {
+inline void write_color(std::ostream& out, const Color& color) {
   Vector3 pixel = color_to_pixel(color);
   out << int(pixel[0]) << ' ' << int(pixel[1]) << ' ' << int(pixel[2]) << '\n';
 }

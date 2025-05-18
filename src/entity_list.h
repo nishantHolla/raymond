@@ -1,12 +1,13 @@
 #ifndef ENTITY_LIST_H_
 #define ENTITY_LIST_H_
 
+#include <vector>
+
+#include "raymond.h"
 #include "ray.h"
 #include "interval.h"
 #include "aabb.h"
 #include "entity.h"
-
-#include <vector>
 
 // ==============================
 // Entity class
