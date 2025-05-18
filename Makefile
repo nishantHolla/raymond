@@ -7,8 +7,11 @@ SRC=src/main.cpp
 LIB=-lm
 ARGS=
 
-debug:
+pre:
+	mkdir -p out
+
+debug: pre
 	$(CC) $(CFLAGS) $(DEBUG_FLAGS) $(OUT) $(SRC) $(LIB)
 
-release:
+release: pre
 	$(CC) $(CFLAGS) $(RELEASE_FLAGS) $(OUT) $(SRC) $(LIB)
